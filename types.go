@@ -1,65 +1,65 @@
-//go:generate dstdocgen -path "." -structure FTWTest -output types_doc.go -package main
+//go:generate docgen types.go types_doc.go FTWTest
 package main
 
 // Input represents the input request in a stage
 // The fields `Version`, `Method` and `URI` we want to explicitly now when they are set to ""
 type Input struct {
 	// description: |
-	//   DestAddr is the IP of the destination host that the test will send the message to.
+	// DestAddr is the IP of the destination host that the test will send the message to.
 	// examples:
 	//   - name: DestAddr
 	//     value: "127.0.0.1"
 	DestAddr *string `yaml:"dest_addr,omitempty" koanf:"dest_addr,omitempty"`
 	// description: |
-	//   Port allows you to declare which port on the destination host the tests should connect to.
+	// Port allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: Port
 	//     value: 80
 	Port *int `yaml:"port,omitempty" koanf:"port,omitempty"`
 	// description: |
-	//   Protocol allows you to declare which port on the destination host the tests should connect to.
+	// Protocol allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: Protocol
 	//     value: 80
 	Protocol *string `yaml:"protocol,omitempty" koanf:"protocol,omitempty"`
 	// description: |
-	//   URI allows you to declare which port on the destination host the tests should connect to.
+	// URI allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: URI
 	//     value: "/get?hello=world"
 	URI *string `yaml:"uri,omitempty" koanf:"uri,omitempty"`
 	// description: |
-	//   Version it the HTTP version used.
+	// Version it the HTTP version used.
 	// examples:
 	//   - name: Version
 	//     value: "1.1"
 	Version *string `yaml:"version,omitempty" koanf:"version,omitempty"`
 	// description: |
-	//   Headers is a map of headers to be sent.
+	// Headers is a map of headers to be sent.
 	// examples:
 	//   - name: Headers
 	//     value: list
 	//Headers ftwhttp.Header `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 	// description: |
-	//   Method allows you to declare which port on the destination host the tests should connect to.
+	// Method allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: Method
 	//     value: "GET"
 	Method *string `yaml:"method,omitempty" koanf:"method,omitempty"`
 	// description: |
-	//   Data allows you to declare which port on the destination host the tests should connect to.
+	// Data allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: Data
 	//     value: "Bibitti bopi"
 	Data *string `yaml:"data,omitempty" koanf:"data,omitempty"`
 	// description: |
-	//   SaveCookie allows you to declare which port on the destination host the tests should connect to.
+	// SaveCookie allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: SaveCookie
 	//     value: 80
 	SaveCookie bool `yaml:"save_cookie,omitempty" koanf:"save_cookie,omitempty"`
 	// description: |
-	//   StopMagic allows you to declare which port on the destination host the tests should connect to.
+	// StopMagic allows you to declare which port on the destination host the tests should connect to.
 	// examples:
 	//   - name: StopMagic
 	//     value: false
@@ -96,19 +96,19 @@ type Output struct {
 	// LogContains describes the text that should be contained in the WAF logs.
 	// examples:
 	//   - name: LogContains
-	//     value: "id \"920100\""
+	//     value: `id "920100"`
 	LogContains string `yaml:"log_contains,omitempty"`
 	// description: |
 	// NoLogContains describes the text that should be contained in the WAF logs.
 	// examples:
 	//   - name: NoLogContains
-	//     value: "id \"920100\""
+	//     value: `id "920100"
 	NoLogContains string `yaml:"no_log_contains,omitempty"`
 	// description: |
 	// ExpectError describes the text that should be contained in the WAF logs.
 	// examples:
 	//   - name: ExpectError
-	//     value: "id \"920100\""
+	//     value: `id "920100"
 	ExpectError bool `yaml:"expect_error,omitempty"`
 }
 
@@ -184,20 +184,20 @@ type Meta struct {
 	Version string `yaml:"version,omitempty"`
 }
 
-// FTWTest is the base type used when unmarshaling
+// FTWTest is the base type used when unmarshaling YAML tests files
 type FTWTest struct {
 	// description: |
 	// Meta describes the metadata information of this yaml test file
 	Meta Meta `yaml:"meta"`
 
 	// description: |
-	//   FileName is the name of the file where these tests are.
+	// FileName is the name of the file where these tests are.
 	// examples:
 	//   - name: FileName
 	//     value: test-1234.yaml
-	FileName string
+	FileName string `yaml:"filename"`
 	// description: |
-	//   Tests is a list of FTW tests
+	// Tests is a list of FTW tests
 	// examples:
 	//   - name: Tests
 	//     value: the tests
