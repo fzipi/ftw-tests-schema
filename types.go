@@ -1,6 +1,101 @@
 //go:generate docgen types.go types_doc.go FTWTest
 package main
 
+// Welcome to the FTW YAMLFormat documentation.
+// In this document we will explain all the possible options that can be used within the YAML format.
+// Generally this is the preferred format for writing tests in as they don't require any programming skills
+// in order to understand and change. If you find a bug in this format please open an issue.
+//
+// FTWTest is the base type used when unmarshaling YAML tests files
+type FTWTest struct {
+	// description: |
+	// Meta describes the metadata information of this yaml test file
+	Meta Meta `yaml:"meta"`
+
+	// description: |
+	// FileName is the name of the file where these tests are.
+	// examples:
+	//   - name: FileName
+	//     value: test-1234.yaml
+	FileName string `yaml:"filename"`
+	// description: |
+	// Tests is a list of FTW tests
+	// examples:
+	//   - name: Tests
+	//     value: the tests
+	Tests []Test `yaml:"tests"`
+}
+
+// Meta describes the metadata information of this yaml test file
+type Meta struct {
+	// description: |
+	// Author is the list of authors that added content to this file
+	// examples:
+	//   - name: Author
+	//     value: Felipe Zipitria
+	Author string `yaml:"author,omitempty"`
+	// description: |
+	// Enabled indicates if the tests are enabled to be run by the engine or not.
+	// examples:
+	//   - name: Enabled
+	//     value: false
+	Enabled bool `yaml:"enabled,omitempty"`
+	// description: |
+	// Name is the name of the tests contained in this file.
+	// examples:
+	//   - name: Name
+	//     value: test01
+	Name string `yaml:"name,omitempty"`
+	// description: |
+	// Description is a textual description of the tests contained in this file.
+	// examples:
+	//   - name: Description
+	//     value: The tests here target SQL injection.
+	Description string `yaml:"description,omitempty"`
+	// description: |
+	// Version is the version of the YAML Schema.
+	// examples:
+	//   - name: Version
+	//     value: v1
+	Version string `yaml:"version,omitempty"`
+}
+
+// Test is an individual test
+type Test struct {
+	// description: |
+	// TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
+	// examples:
+	//   - name: TestTitle
+	//     value: 920100-1
+	TestTitle string `yaml:"test_title"`
+	// description: |
+	// TestDescription is the description for this particular test. Should be used to describe the internals of
+	// the specific things this test is targeting.
+	// examples:
+	//   - name: TestDescription
+	//     value: This test targets something
+	TestDescription string `yaml:"desc,omitempty"`
+	// description: |
+	// Stages is the list of all the stages to perform this test.
+	Stages []Stage `yaml:"stages"`
+}
+
+// Stage is an individual test stage
+type Stage struct {
+	// description: |
+	// Input is the data that is passed to the test
+	// examples:
+	//   - name: Input
+	//     value: test
+	Input Input `yaml:"input"`
+	// description: |
+	// Output is the data that is returned from the test
+	// examples:
+	//   - name: Output
+	//     value: test
+	Output Output `yaml:"output"`
+}
+
 // Input represents the input request in a stage
 // The fields `Version`, `Method` and `URI` we want to explicitly now when they are set to ""
 type Input struct {
@@ -110,96 +205,4 @@ type Output struct {
 	//   - name: ExpectError
 	//     value: `id "920100"
 	ExpectError bool `yaml:"expect_error,omitempty"`
-}
-
-// Stage is an individual test stage
-type Stage struct {
-	// description: |
-	// Input is the data that is passed to the test
-	// examples:
-	//   - name: Input
-	//     value: test
-	Input Input `yaml:"input"`
-	// description: |
-	// Output is the data that is returned from the test
-	// examples:
-	//   - name: Output
-	//     value: test
-	Output Output `yaml:"output"`
-}
-
-// Stages is the list of all the stages to perform this test.
-type Stages []Stage
-
-// Test is an individual test
-type Test struct {
-	// description: |
-	// TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
-	// examples:
-	//   - name: TestTitle
-	//     value: 920100-1
-	TestTitle string `yaml:"test_title"`
-	// description: |
-	// TestDescription is the description for this particular test. Should be used to describe the internals of
-	// the specific things this test is targeting.
-	// examples:
-	//   - name: TestDescription
-	//     value: This test targets something
-	TestDescription string `yaml:"desc,omitempty"`
-	// description: |
-	Stages Stages `yaml:"stages"`
-}
-
-// Meta describes the metadata information of this yaml test file
-type Meta struct {
-	// description: |
-	// Author is the list of authors that added content to this file
-	// examples:
-	//   - name: Author
-	//     value: Felipe Zipitria
-	Author string `yaml:"author,omitempty"`
-	// description: |
-	// Enabled indicates if the tests are enabled to be run by the engine or not.
-	// examples:
-	//   - name: Enabled
-	//     value: false
-	Enabled bool `yaml:"enabled,omitempty"`
-	// description: |
-	// Name is the name of the tests contained in this file.
-	// examples:
-	//   - name: Name
-	//     value: test01
-	Name string `yaml:"name,omitempty"`
-	// description: |
-	// Description is a textual description of the tests contained in this file.
-	// examples:
-	//   - name: Description
-	//     value: The tests here target SQL injection.
-	Description string `yaml:"description,omitempty"`
-	// description: |
-	// Version is the version of the YAML Schema.
-	// examples:
-	//   - name: Version
-	//     value: v1
-	Version string `yaml:"version,omitempty"`
-}
-
-// FTWTest is the base type used when unmarshaling YAML tests files
-type FTWTest struct {
-	// description: |
-	// Meta describes the metadata information of this yaml test file
-	Meta Meta `yaml:"meta"`
-
-	// description: |
-	// FileName is the name of the file where these tests are.
-	// examples:
-	//   - name: FileName
-	//     value: test-1234.yaml
-	FileName string `yaml:"filename"`
-	// description: |
-	// Tests is a list of FTW tests
-	// examples:
-	//   - name: Tests
-	//     value: the tests
-	Tests []Test `yaml:"tests"`
 }
