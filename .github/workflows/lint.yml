@@ -13,5 +13,4 @@ jobs:
         with:
           go-version: v1.18.x
           cache: true
-      - run: command -v docgen
       - run: go run mage.go lint
