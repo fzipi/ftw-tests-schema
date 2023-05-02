@@ -10,8 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"os"
-	"path/filepath"
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -86,23 +84,19 @@ func Test() error {
 	return nil
 }
 
-// Doc runs godoc, access at http://localhost:6060
-func Doc() error {
-	return sh.RunV("go", "run", "golang.org/x/tools/cmd/godoc@latest", "-http=:6060")
-}
-
-// Precommit installs a git hook to run check when committing
-func Precommit() error {
-	if _, err := os.Stat(filepath.Join(".git", "hooks")); os.IsNotExist(err) {
-		return errNoGitDir
+func Markdown() error {
+	if err := sh.RunV("go", "build"); err != nil {
+		return err
 	}
-
-	f, err := os.ReadFile(".pre-commit.hook")
+	markdown, err := sh.Output("./ftw-tests-yaml-schema")
 	if err != nil {
 		return err
 	}
+	// Write markdown to file
+	fmt.Println(markdown)
 
-	return os.WriteFile(filepath.Join(".git", "hooks", "pre-commit"), f, 0755)
+	return nil
+
 }
 
 // Check runs lint and tests.
