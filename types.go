@@ -1,12 +1,11 @@
 // Copyright 2023 Felipe Zipitria
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate docgen types.go types_doc.go FTWTest
+//go:generate dstdocgen -path . -structure FTWTest -output ./types_doc.go
 package main
 
 import (
 	"github.com/coreruleset/go-ftw/ftwhttp"
-	"github.com/coreruleset/go-ftw/test"
 )
 
 var (
@@ -17,20 +16,25 @@ var (
 	method   = "REPORT"
 	version  = "HTTP/1.1"
 
-	exampleInput = test.Input{
+	exampleHeaders = ftwhttp.Header{
+		"User-Agent": "CRS Tests",
+		"Host":       "localhost",
+		"Accept":     "*/*",
+	}
+	exampleInput = Input{
 		DestAddr:       &destaddr,
 		Port:           &port,
 		Protocol:       &protocol,
 		URI:            &uri,
 		Version:        &version,
-		Headers:        make(ftwhttp.Header),
+		Headers:        exampleHeaders,
 		Method:         &method,
 		Data:           nil,
 		EncodedRequest: "TXkgRGF0YQo=",
 		SaveCookie:     false,
 		StopMagic:      false,
 	}
-	exampleOutput = test.Output{
+	exampleOutput = Output{
 		Status:           []int{200},
 		ResponseContains: "",
 		LogContains:      "nothing",
@@ -186,6 +190,13 @@ type Input struct {
 	//   - name: Method
 	//     value: "\"GET\""
 	Method *string `yaml:"method,omitempty" koanf:"method,omitempty"`
+
+	// description: |
+	//   Method allows you to declare which port on the destination host the tests should connect to.
+	// examples:
+	//   - name: Headers
+	//     value: exampleHeaders
+	Headers ftwhttp.Header `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
 	//   Data allows you to declare which port on the destination host the tests should connect to.

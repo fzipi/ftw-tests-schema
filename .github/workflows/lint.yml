@@ -1,16 +1,24 @@
-name: Lint (pre-commit)
+name: Lint and Generate
 
 on:
   pull_request:
   push:
 jobs:
-  lint:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v4
+        env:
+          GOBIN: /home/runner/go/bin
         with:
-          go-version: v1.18.x
+          go-version: v1.19.x
           cache: true
-      - run: go run mage.go lint
+      - name: setup
+        run: |
+          go install github.com/projectdiscovery/yamldoc-go/cmd/docgen/dstdocgen@latest
+      - name: lint
+        run: go run mage.go lint
+      - name: markdown
+        run: go run mage.go markdown >> $GITHUB_STEP_SUMMARY
