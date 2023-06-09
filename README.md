@@ -1,7 +1,6 @@
 # FTW Tests YAML Schema
 
-This repository contains the YAML Schema used in the FTW tool. It is being maintained as code, 
-
+This repository contains the YAML Schema used in the FTW tool. It is being maintained as code, so it will be easy to include as a library.
 
 ## Usage
 
@@ -14,3 +13,7 @@ Then you can run:
 ```
 go run mage.go markdown
 ```
+
+## Generated documentation versions
+
+
