@@ -1,9 +1,8 @@
-module github.com/fzipi/ftw-tests-yaml-schema
+module github.com/fzipi/ftw-tests-yaml-schema/v1
 
 go 1.19
 
 require (
-	github.com/coreruleset/go-ftw v0.4.9
 	github.com/magefile/mage v1.14.0
 	github.com/projectdiscovery/yamldoc-go v1.0.4
 )

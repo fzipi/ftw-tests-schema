@@ -4,10 +4,6 @@
 //go:generate dstdocgen -path . -structure FTWTest -output ./types_doc.go
 package main
 
-import (
-	"github.com/coreruleset/go-ftw/ftwhttp"
-)
-
 var (
 	destaddr = "192.168.0.1"
 	port     = 8080
@@ -16,7 +12,7 @@ var (
 	method   = "REPORT"
 	version  = "HTTP/1.1"
 
-	exampleHeaders = ftwhttp.Header{
+	exampleHeaders = map[string]string{
 		"User-Agent": "CRS Tests",
 		"Host":       "localhost",
 		"Accept":     "*/*",
@@ -47,7 +43,7 @@ var (
 // In this document we will explain all the possible options that can be used within the YAML format.
 // Generally this is the preferred format for writing tests in as they don't require any programming skills
 // in order to understand and change. If you find a bug in this format please open an issue.
-//
+
 // FTWTest is the base type used when unmarshaling YAML tests files
 type FTWTest struct {
 	// description: |
@@ -196,7 +192,7 @@ type Input struct {
 	// examples:
 	//   - name: Headers
 	//     value: exampleHeaders
-	Headers ftwhttp.Header `yaml:"headers,omitempty" koanf:"headers,omitempty"`
+	Headers map[string]string `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
 	//   Data allows you to declare which port on the destination host the tests should connect to.
