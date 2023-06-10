@@ -1,4 +1,4 @@
-module github.com/fzipi/ftw-tests-yaml-schema/v1
+module github.com/fzipi/ftw-tests-schema
 
 go 1.19
 

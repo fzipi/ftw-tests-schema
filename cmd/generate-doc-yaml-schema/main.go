@@ -6,7 +6,7 @@ package main
 import (
 	"os"
 
-	"github.com/fzipi/ftw-tests-yaml-schema/v1/types"
+	"github.com/fzipi/ftw-tests-yaml-schema/v1"
 )
 
 func main() {
