@@ -85,10 +85,10 @@ func Test() error {
 }
 
 func Markdown() error {
-	if err := sh.RunV("go", "build"); err != nil {
+	if err := sh.RunV("go", "build", "./cmd/generate-doc-yaml-schema"); err != nil {
 		return err
 	}
-	markdown, err := sh.Output("./ftw-tests-yaml-schema")
+	markdown, err := sh.Output("./generate-doc-yaml-schema")
 	if err != nil {
 		return err
 	}

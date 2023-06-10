@@ -4,8 +4,9 @@
 package main
 
 import (
-	"github.com/fzipi/ftw-tests-yaml-schema/v1/types"
 	"os"
+
+	"github.com/fzipi/ftw-tests-yaml-schema/v1/types"
 )
 
 func main() {
