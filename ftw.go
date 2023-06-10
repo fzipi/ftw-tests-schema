@@ -3,12 +3,18 @@
 
 package main
 
-import "os"
+import (
+	"github.com/fzipi/ftw-tests-yaml-schema/v1/types"
+	"os"
+)
 
 func main() {
-	data, err := GetFTWTestDoc().Encode()
+	data, err := types.GetFTWTestDoc().Encode()
 	if err != nil {
 		panic(err)
 	}
-	os.Stdout.Write(data)
+	_, err = os.Stdout.Write(data)
+	if err != nil {
+		panic(err)
+	}
 }

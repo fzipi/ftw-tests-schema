@@ -1,8 +1,9 @@
+package types
+
 // Copyright 2023 Felipe Zipitria
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate dstdocgen -path . -structure FTWTest -output ./types_doc.go
-package main
+//go:generate dstdocgen -package types -path . -structure FTWTest -output ./types_doc.go
 
 var (
 	destaddr = "192.168.0.1"
