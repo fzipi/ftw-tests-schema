@@ -13,6 +13,14 @@ var (
 	method   = "REPORT"
 	version  = "HTTP/1.1"
 
+	exampleStages = []Stages{
+		{
+			Stage: Stage{
+				Input:  exampleInput,
+				Output: exampleOutput,
+			},
+		},
+	}
 	exampleHeaders = map[string]string{
 		"User-Agent": "CRS Tests",
 		"Host":       "localhost",
@@ -123,7 +131,17 @@ type Test struct {
 
 	// description: |
 	//   Stages is the list of all the stages to perform this test.
-	Stages []Stage `yaml:"stages"`
+	// examples:
+	//   - name: Stages
+	//     value: exampleStages
+	Stages []Stages `yaml:"stages"`
+}
+
+// Stages is a list of stages
+type Stages struct {
+	// description: |
+	//   Stage is an individual test stage
+	Stage Stage `yaml:"stage"`
 }
 
 // Stage is an individual test stage
