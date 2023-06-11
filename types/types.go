@@ -5,14 +5,15 @@ package types
 
 //go:generate dstdocgen -package types -path . -structure FTWTest -output ./types_doc.go
 
-var (
-	destaddr = "192.168.0.1"
-	port     = 8080
-	protocol = "http"
-	uri      = "/test"
-	method   = "REPORT"
-	version  = "HTTP/1.1"
+func intPtr(i int) *int {
+	return &i
+}
 
+func strPtr(s string) *string {
+	return &s
+}
+
+var (
 	exampleStages = []Stages{
 		{
 			Stage: Stage{
@@ -27,13 +28,13 @@ var (
 		"Accept":     "*/*",
 	}
 	exampleInput = Input{
-		DestAddr:       &destaddr,
-		Port:           &port,
-		Protocol:       &protocol,
-		URI:            &uri,
-		Version:        &version,
+		DestAddr:       strPtr("192.168.0.1"),
+		Port:           intPtr(8080),
+		Protocol:       strPtr("http"),
+		URI:            strPtr("/test"),
+		Version:        strPtr("HTTP/1.1"),
 		Headers:        exampleHeaders,
-		Method:         &method,
+		Method:         strPtr("REPORT"),
 		Data:           nil,
 		EncodedRequest: "TXkgRGF0YQo=",
 		SaveCookie:     false,
@@ -64,7 +65,7 @@ type FTWTest struct {
 	// examples:
 	//   - name: FileName
 	//     value: "\"test-1234.yaml\""
-	FileName string `yaml:"filename"`
+	FileName string
 
 	// description: |
 	//   Tests is a list of FTW tests

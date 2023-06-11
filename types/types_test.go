@@ -1,11 +1,21 @@
 package types
 
 import (
+	//"github.com/goccy/go-yaml"
 	"gopkg.in/yaml.v3"
 	"testing"
 )
 
+var testInput = `---
+dest_addr: "127.0.0.1"
+port: 80
+headers:
+  User-Agent: "FTW Schema Tests"
+  Host: "localhost"
+`
+
 var testYaml = `---
+filename: "testYaml.yaml"
 meta:
   author: "ftw-tests-schema"
   enabled: true
@@ -37,15 +47,17 @@ tests:
             status: [200, 204]
 `
 
-func intPtr(i int) *int {
-	return &i
-}
-
-func strPtr(s string) *string {
-	return &s
+var inputTest = &Input{
+	DestAddr: strPtr("127.0.0.1"),
+	Port:     intPtr(80),
+	Headers: map[string]string{
+		"User-Agent": "FTW Schema Tests",
+		"Host":       "localhost",
+	},
 }
 
 var ftwTest = &FTWTest{
+	FileName: "testYaml.yaml",
 	Meta: Meta{
 		Author:      "ftw-tests-schema",
 		Enabled:     true,
@@ -97,7 +109,7 @@ var ftwTest = &FTWTest{
 	},
 }
 
-func TestUnmarshalYAMLTest(t *testing.T) {
+func TestUnmarshalFTWTest(t *testing.T) {
 	var ftw *FTWTest
 
 	err := yaml.Unmarshal([]byte(testYaml), &ftw)
@@ -106,6 +118,9 @@ func TestUnmarshalYAMLTest(t *testing.T) {
 		t.Errorf("Unmarshal: %v", err)
 	}
 
+	if ftw.FileName != ftwTest.FileName {
+		t.Errorf("FileName: %v != %v", ftw.FileName, ftwTest.FileName)
+	}
 	if ftw.Meta.Author != ftwTest.Meta.Author {
 		t.Errorf("Author: %v != %v", ftw.Meta.Author, ftwTest.Meta.Author)
 	}
@@ -153,5 +168,24 @@ func TestUnmarshalYAMLTest(t *testing.T) {
 				t.Errorf("Status: %v != %v", len(stage.Stage.Output.Status), len(ftwTest.Tests[i].Stages[j].Stage.Output.Status))
 			}
 		}
+	}
+}
+
+func TestUnmarshalInput(t *testing.T) {
+	var input *Input
+
+	err := yaml.Unmarshal([]byte(testInput), &input)
+	if err != nil {
+		t.Errorf("Unmarshal: %v", err)
+	}
+
+	if input.DestAddr != nil && *input.DestAddr != *inputTest.DestAddr {
+		t.Errorf("DestAddr: %v != %v", *input.DestAddr, *inputTest.DestAddr)
+	}
+	if input.Port != nil && *input.Port != *inputTest.Port {
+		t.Errorf("Port: %v != %v", *input.Port, *inputTest.Port)
+	}
+	if input.Method != nil && *input.Method != *inputTest.Method {
+		t.Errorf("Method: %v != %v", *input.Method, *inputTest.Method)
 	}
 }
