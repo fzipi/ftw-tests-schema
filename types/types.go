@@ -14,9 +14,9 @@ func strPtr(s string) *string {
 }
 
 var (
-	exampleStages = []Stages{
+	exampleStages = []Stage{
 		{
-			Stage: Stage{
+			StageData: StageData{
 				Input:  exampleInput,
 				Output: exampleOutput,
 			},
@@ -135,18 +135,18 @@ type Test struct {
 	// examples:
 	//   - name: Stages
 	//     value: exampleStages
-	Stages []Stages `yaml:"stages"`
+	Stages []Stage `yaml:"stages"`
 }
 
-// Stages is a list of stages
-type Stages struct {
+// Stage is a list of stages
+type Stage struct {
 	// description: |
 	//   Stage is an individual test stage
-	Stage Stage `yaml:"stage"`
+	StageData `yaml:"stage"`
 }
 
-// Stage is an individual test stage
-type Stage struct {
+// StageData is the data that is passed to the test, and the data that is returned from the test
+type StageData struct {
 	// description: |
 	//   Input is the data that is passed to the test
 	// examples:

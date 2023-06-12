@@ -1,8 +1,7 @@
 package types
 
 import (
-	//"github.com/goccy/go-yaml"
-	"gopkg.in/yaml.v3"
+	"github.com/goccy/go-yaml"
 	"testing"
 )
 
@@ -23,6 +22,7 @@ meta:
   description: "Simple YAML to test that the schema is working."
 tests:
   - test_title: 1234-1
+    desc: "Test that the schema is working."
     stages:
       - stage:
           input:
@@ -66,10 +66,11 @@ var ftwTest = &FTWTest{
 	},
 	Tests: []Test{
 		{
-			TestTitle: "1234-1",
-			Stages: []Stages{
+			TestTitle:       "1234-1",
+			TestDescription: "Test that the schema is working.",
+			Stages: []Stage{
 				{
-					Stage: Stage{
+					StageData: StageData{
 						Input: Input{
 							DestAddr: strPtr("127.0.0.1"),
 							Port:     intPtr(80),
@@ -87,9 +88,9 @@ var ftwTest = &FTWTest{
 		},
 		{
 			TestTitle: "1234-2",
-			Stages: []Stages{
+			Stages: []Stage{
 				{
-					Stage: Stage{
+					StageData: StageData{
 						Input: Input{
 							DestAddr: strPtr("127.0.0.1"),
 							Port:     intPtr(80),
@@ -110,7 +111,7 @@ var ftwTest = &FTWTest{
 }
 
 func TestUnmarshalFTWTest(t *testing.T) {
-	var ftw *FTWTest
+	var ftw FTWTest
 
 	err := yaml.Unmarshal([]byte(testYaml), &ftw)
 
@@ -144,35 +145,35 @@ func TestUnmarshalFTWTest(t *testing.T) {
 			t.Errorf("Stages: %v != %v", len(test.Stages), len(ftwTest.Tests[i].Stages))
 		}
 		for j, stage := range test.Stages {
-			if *stage.Stage.Input.DestAddr != *ftwTest.Tests[i].Stages[j].Stage.Input.DestAddr {
-				t.Errorf("DestAddr: %v != %v", *stage.Stage.Input.DestAddr, *ftwTest.Tests[i].Stages[j].Stage.Input.DestAddr)
+			if *stage.StageData.Input.DestAddr != *ftwTest.Tests[i].Stages[j].StageData.Input.DestAddr {
+				t.Errorf("DestAddr: %v != %v", *stage.StageData.Input.DestAddr, *ftwTest.Tests[i].Stages[j].StageData.Input.DestAddr)
 			}
-			if *stage.Stage.Input.Port != *ftwTest.Tests[i].Stages[j].Stage.Input.Port {
-				t.Errorf("Port: %v != %v", *stage.Stage.Input.Port, *ftwTest.Tests[i].Stages[j].Stage.Input.Port)
+			if *stage.StageData.Input.Port != *ftwTest.Tests[i].Stages[j].StageData.Input.Port {
+				t.Errorf("Port: %v != %v", *stage.StageData.Input.Port, *ftwTest.Tests[i].Stages[j].StageData.Input.Port)
 			}
-			if stage.Stage.Input.Method != nil && *stage.Stage.Input.Method != *ftwTest.Tests[i].Stages[j].Stage.Input.Method {
-				t.Errorf("Method: %v != %v", stage.Stage.Input.Method, ftwTest.Tests[i].Stages[j].Stage.Input.Method)
+			if stage.StageData.Input.Method != nil && *stage.StageData.Input.Method != *ftwTest.Tests[i].Stages[j].StageData.Input.Method {
+				t.Errorf("Method: %v != %v", stage.StageData.Input.Method, ftwTest.Tests[i].Stages[j].StageData.Input.Method)
 			}
-			if len(stage.Stage.Input.Headers) != len(ftwTest.Tests[i].Stages[j].Stage.Input.Headers) {
-				t.Errorf("Headers: %v != %v", len(stage.Stage.Input.Headers), len(ftwTest.Tests[i].Stages[j].Stage.Input.Headers))
+			if len(stage.StageData.Input.Headers) != len(ftwTest.Tests[i].Stages[j].StageData.Input.Headers) {
+				t.Errorf("Headers: %v != %v", len(stage.StageData.Input.Headers), len(ftwTest.Tests[i].Stages[j].StageData.Input.Headers))
 			}
-			for k, header := range stage.Stage.Input.Headers {
-				if header != ftwTest.Tests[i].Stages[j].Stage.Input.Headers[k] {
-					t.Errorf("Header: %v != %v", header, ftwTest.Tests[i].Stages[j].Stage.Input.Headers[k])
+			for k, header := range stage.StageData.Input.Headers {
+				if header != ftwTest.Tests[i].Stages[j].StageData.Input.Headers[k] {
+					t.Errorf("Header: %v != %v", header, ftwTest.Tests[i].Stages[j].StageData.Input.Headers[k])
 				}
 			}
-			if stage.Stage.Output.NoLogContains != ftwTest.Tests[i].Stages[j].Stage.Output.NoLogContains {
-				t.Errorf("NoLogContains: %v != %v", stage.Stage.Output.NoLogContains, ftwTest.Tests[i].Stages[j].Stage.Output.NoLogContains)
+			if stage.StageData.Output.NoLogContains != ftwTest.Tests[i].Stages[j].StageData.Output.NoLogContains {
+				t.Errorf("NoLogContains: %v != %v", stage.StageData.Output.NoLogContains, ftwTest.Tests[i].Stages[j].StageData.Output.NoLogContains)
 			}
-			if len(stage.Stage.Output.Status) != len(ftwTest.Tests[i].Stages[j].Stage.Output.Status) {
-				t.Errorf("Status: %v != %v", len(stage.Stage.Output.Status), len(ftwTest.Tests[i].Stages[j].Stage.Output.Status))
+			if len(stage.StageData.Output.Status) != len(ftwTest.Tests[i].Stages[j].StageData.Output.Status) {
+				t.Errorf("Status: %v != %v", len(stage.StageData.Output.Status), len(ftwTest.Tests[i].Stages[j].StageData.Output.Status))
 			}
 		}
 	}
 }
 
 func TestUnmarshalInput(t *testing.T) {
-	var input *Input
+	var input Input
 
 	err := yaml.Unmarshal([]byte(testInput), &input)
 	if err != nil {
