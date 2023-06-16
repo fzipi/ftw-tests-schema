@@ -70,7 +70,7 @@ var ftwTest = &FTWTest{
 			TestDescription: "Test that the schema is working.",
 			Stages: []Stage{
 				{
-					StageData: StageData{
+					SD: StageData{
 						Input: Input{
 							DestAddr: strPtr("127.0.0.1"),
 							Port:     intPtr(80),
@@ -90,7 +90,7 @@ var ftwTest = &FTWTest{
 			TestTitle: "1234-2",
 			Stages: []Stage{
 				{
-					StageData: StageData{
+					SD: StageData{
 						Input: Input{
 							DestAddr: strPtr("127.0.0.1"),
 							Port:     intPtr(80),
@@ -145,28 +145,28 @@ func TestUnmarshalFTWTest(t *testing.T) {
 			t.Errorf("Stages: %v != %v", len(test.Stages), len(ftwTest.Tests[i].Stages))
 		}
 		for j, stage := range test.Stages {
-			if *stage.StageData.Input.DestAddr != *ftwTest.Tests[i].Stages[j].StageData.Input.DestAddr {
-				t.Errorf("DestAddr: %v != %v", *stage.StageData.Input.DestAddr, *ftwTest.Tests[i].Stages[j].StageData.Input.DestAddr)
+			if *stage.SD.Input.DestAddr != *ftwTest.Tests[i].Stages[j].SD.Input.DestAddr {
+				t.Errorf("DestAddr: %v != %v", *stage.SD.Input.DestAddr, *ftwTest.Tests[i].Stages[j].SD.Input.DestAddr)
 			}
-			if *stage.StageData.Input.Port != *ftwTest.Tests[i].Stages[j].StageData.Input.Port {
-				t.Errorf("Port: %v != %v", *stage.StageData.Input.Port, *ftwTest.Tests[i].Stages[j].StageData.Input.Port)
+			if *stage.SD.Input.Port != *ftwTest.Tests[i].Stages[j].SD.Input.Port {
+				t.Errorf("Port: %v != %v", *stage.SD.Input.Port, *ftwTest.Tests[i].Stages[j].SD.Input.Port)
 			}
-			if stage.StageData.Input.Method != nil && *stage.StageData.Input.Method != *ftwTest.Tests[i].Stages[j].StageData.Input.Method {
-				t.Errorf("Method: %v != %v", stage.StageData.Input.Method, ftwTest.Tests[i].Stages[j].StageData.Input.Method)
+			if stage.SD.Input.Method != nil && *stage.SD.Input.Method != *ftwTest.Tests[i].Stages[j].SD.Input.Method {
+				t.Errorf("Method: %v != %v", stage.SD.Input.Method, ftwTest.Tests[i].Stages[j].SD.Input.Method)
 			}
-			if len(stage.StageData.Input.Headers) != len(ftwTest.Tests[i].Stages[j].StageData.Input.Headers) {
-				t.Errorf("Headers: %v != %v", len(stage.StageData.Input.Headers), len(ftwTest.Tests[i].Stages[j].StageData.Input.Headers))
+			if len(stage.SD.Input.Headers) != len(ftwTest.Tests[i].Stages[j].SD.Input.Headers) {
+				t.Errorf("Headers: %v != %v", len(stage.SD.Input.Headers), len(ftwTest.Tests[i].Stages[j].SD.Input.Headers))
 			}
-			for k, header := range stage.StageData.Input.Headers {
-				if header != ftwTest.Tests[i].Stages[j].StageData.Input.Headers[k] {
-					t.Errorf("Header: %v != %v", header, ftwTest.Tests[i].Stages[j].StageData.Input.Headers[k])
+			for k, header := range stage.SD.Input.Headers {
+				if header != ftwTest.Tests[i].Stages[j].SD.Input.Headers[k] {
+					t.Errorf("Header: %v != %v", header, ftwTest.Tests[i].Stages[j].SD.Input.Headers[k])
 				}
 			}
-			if stage.StageData.Output.NoLogContains != ftwTest.Tests[i].Stages[j].StageData.Output.NoLogContains {
-				t.Errorf("NoLogContains: %v != %v", stage.StageData.Output.NoLogContains, ftwTest.Tests[i].Stages[j].StageData.Output.NoLogContains)
+			if stage.SD.Output.NoLogContains != ftwTest.Tests[i].Stages[j].SD.Output.NoLogContains {
+				t.Errorf("NoLogContains: %v != %v", stage.SD.Output.NoLogContains, ftwTest.Tests[i].Stages[j].SD.Output.NoLogContains)
 			}
-			if len(stage.StageData.Output.Status) != len(ftwTest.Tests[i].Stages[j].StageData.Output.Status) {
-				t.Errorf("Status: %v != %v", len(stage.StageData.Output.Status), len(ftwTest.Tests[i].Stages[j].StageData.Output.Status))
+			if len(stage.SD.Output.Status) != len(ftwTest.Tests[i].Stages[j].SD.Output.Status) {
+				t.Errorf("Status: %v != %v", len(stage.SD.Output.Status), len(ftwTest.Tests[i].Stages[j].SD.Output.Status))
 			}
 		}
 	}

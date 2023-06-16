@@ -14,12 +14,13 @@ func strPtr(s string) *string {
 }
 
 var (
+	exampleStageData = StageData{
+		Input:  exampleInput,
+		Output: exampleOutput,
+	}
 	exampleStages = []Stage{
 		{
-			StageData: StageData{
-				Input:  exampleInput,
-				Output: exampleOutput,
-			},
+			exampleStageData,
 		},
 	}
 	exampleHeaders = map[string]string{
@@ -113,7 +114,7 @@ type Meta struct {
 	Version string `yaml:"version,omitempty"`
 }
 
-// Test is an individual test
+// Test is an individual test. One test can have multiple stages.
 type Test struct {
 	// description: |
 	//   TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
@@ -141,8 +142,11 @@ type Test struct {
 // Stage is a list of stages
 type Stage struct {
 	// description: |
-	//   Stage is an individual test stage
-	StageData `yaml:"stage"`
+	//   StageData is an individual test stage
+	// examples:
+	//   - name: StageData
+	//     value: exampleStageData
+	SD StageData `yaml:"stage"`
 }
 
 // StageData is the data that is passed to the test, and the data that is returned from the test
