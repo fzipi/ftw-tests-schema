@@ -6,11 +6,11 @@ package main
 import (
 	"os"
 
-	"github.com/coreruleset/ftw-tests-schema/types"
+	"github.com/coreruleset/ftw-tests-schema/test"
 )
 
 func main() {
-	data, err := types.GetFTWTestDoc().Encode()
+	data, err := test.GetFTWTestDoc().Encode()
 	if err != nil {
 		panic(err)
 	}

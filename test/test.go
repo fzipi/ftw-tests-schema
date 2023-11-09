@@ -1,9 +1,9 @@
-package types
+package test
 
 // Copyright 2023 Felipe Zipitria
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate dstdocgen -package types -path . -structure FTWTest -output ./types_doc.go
+//go:generate dstdocgen -package test -path . -structure FTWTest -output ./test_doc.go
 
 func intPtr(i int) *int {
 	return &i
@@ -20,7 +20,7 @@ func strPtr(s string) *string {
 var (
 	exampleStageData = StageData{
 		Input:  exampleInput,
-		Output: exampleOutput,
+		Output: ExampleOutput,
 	}
 	exampleStages = []Stage{
 		{
@@ -46,7 +46,7 @@ var (
 		StopMagic:           boolPtr(true),
 		AutocompleteHeaders: boolPtr(false),
 	}
-	exampleOutput = Output{
+	ExampleOutput = Output{
 		Status:           []int{200},
 		ResponseContains: "",
 		LogContains:      "nothing",

@@ -16,7 +16,7 @@ Metadata parameters are present once per test file and are located by convention
     description: "This file contains example tests."
   ...
 ```  
-What follows are all the possible Metadata parameters that are current supported
+What follows are all the possible Metadata parameters that are currently supported
 
 author
 ------
