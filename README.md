@@ -1,5 +1,7 @@
 # FTW Tests YAML Schema
 
+[![Lint and Generate](https://github.com/coreruleset/ftw-tests-schema/actions/workflows/lint.yml/badge.svg)](https://github.com/coreruleset/ftw-tests-schema/actions/workflows/lint.yml)
+
 This repository contains the YAML Schema used in the FTW tool. It is being maintained as code, so it will be easy to include as a library.
 
 ## Usage

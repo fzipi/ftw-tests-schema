@@ -13,7 +13,7 @@ jobs:
         env:
           GOBIN: /home/runner/go/bin
         with:
-          go-version: v1.19.x
+          go-version: v1.21.x
           cache: true
       - name: setup
         run: |
