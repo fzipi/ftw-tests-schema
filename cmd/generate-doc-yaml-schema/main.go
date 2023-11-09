@@ -6,7 +6,7 @@ package main
 import (
 	"os"
 
-	"github.com/fzipi/ftw-tests-schema/types"
+	"github.com/coreruleset/ftw-tests-schema/types"
 )
 
 func main() {
