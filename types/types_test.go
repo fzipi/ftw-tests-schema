@@ -1,8 +1,9 @@
 package types
 
 import (
-	"github.com/goccy/go-yaml"
 	"testing"
+
+	"github.com/goccy/go-yaml"
 )
 
 var testInput = `---
@@ -60,7 +61,7 @@ var ftwTest = &FTWTest{
 	FileName: "testYaml.yaml",
 	Meta: Meta{
 		Author:      "ftw-tests-schema",
-		Enabled:     true,
+		Enabled:     boolPtr(true),
 		Name:        "testYaml",
 		Description: "Simple YAML to test that the schema is working.",
 	},
@@ -125,7 +126,7 @@ func TestUnmarshalFTWTest(t *testing.T) {
 	if ftw.Meta.Author != ftwTest.Meta.Author {
 		t.Errorf("Author: %v != %v", ftw.Meta.Author, ftwTest.Meta.Author)
 	}
-	if ftw.Meta.Enabled != ftwTest.Meta.Enabled {
+	if *ftw.Meta.Enabled != *ftwTest.Meta.Enabled {
 		t.Errorf("Enabled: %v != %v", ftw.Meta.Enabled, ftwTest.Meta.Enabled)
 	}
 	if ftw.Meta.Name != ftwTest.Meta.Name {

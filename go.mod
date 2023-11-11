@@ -5,6 +5,7 @@ go 1.21
 require github.com/magefile/mage v1.15.0
 
 require (
+	// Goccy verion is expected to stay at 1.9.2 (Same of go-ftw) because of https://github.com/goccy/go-yaml/issues/325
 	github.com/goccy/go-yaml v1.9.2
 	github.com/projectdiscovery/yamldoc-go v1.0.4
 )
