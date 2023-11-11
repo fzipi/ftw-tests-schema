@@ -177,70 +177,71 @@ type Input struct {
 	DestAddr *string `yaml:"dest_addr,omitempty" koanf:"dest_addr,omitempty"`
 
 	// description: |
-	//   Port allows you to declare which port on the destination host the tests should connect to.
+	//   Port allows you to declare which port on the destination host the test should connect to.
 	// examples:
 	//   - name: Port
 	//     value: 80
 	Port *int `yaml:"port,omitempty" koanf:"port,omitempty"`
 
 	// description: |
-	//   Protocol allows you to declare which port on the destination host the tests should connect to.
+	//   Protocol allows you to declare which protocol the test should use when sending the request.
 	// examples:
 	//   - name: Protocol
 	//     value: "\"http\""
 	Protocol *string `yaml:"protocol,omitempty" koanf:"protocol,omitempty"`
 
 	// description: |
-	//   URI allows you to declare which port on the destination host the tests should connect to.
+	//   URI allows you to declare the URI the test should use as part of the request line.
 	// examples:
 	//   - name: URI
 	//     value: "\"/get?hello=world\""
 	URI *string `yaml:"uri,omitempty" koanf:"uri,omitempty"`
 
 	// description: |
-	//   Version it the HTTP version used.
+	//   Version allows you to declare the HTTP version the test should use as part of the request line.
 	// examples:
 	//   - name: Version
 	//     value: "\"1.1\""
 	Version *string `yaml:"version,omitempty" koanf:"version,omitempty"`
 
 	// description: |
-	//   Method allows you to declare which port on the destination host the tests should connect to.
+	//   Method allows you to declare the HTTP method the test should use as part of the request line.
 	// examples:
 	//   - name: Method
 	//     value: "\"GET\""
 	Method *string `yaml:"method,omitempty" koanf:"method,omitempty"`
 
 	// description: |
-	//   Method allows you to declare which port on the destination host the tests should connect to.
+	//   Method allows you to declare headers that the test should send.
 	// examples:
 	//   - name: Headers
 	//     value: exampleHeaders
 	Headers map[string]string `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
-	//   Data allows you to declare which port on the destination host the tests should connect to.
+	//   Data allows you to declare the payload that the test should in the request body.
 	// examples:
 	//   - name: Data
 	//     value: "\"Bibitti bopi\""
 	Data *string `yaml:"data,omitempty" koanf:"data,omitempty"`
 
 	// description: |
-	//   SaveCookie allows you to declare which port on the destination host the tests should connect to.
+	//   SaveCookie allows you to automatically provide cookies if there are multiple stages and save cookie is set
 	// examples:
 	//   - name: SaveCookie
 	//     value: 80
 	SaveCookie bool `yaml:"save_cookie,omitempty" koanf:"save_cookie,omitempty"`
 
 	// description: |
-	//   StopMagic allows you to declare which port on the destination host the tests should connect to.
+	//   StopMagic blocks the test framework to automatically fill the request with Content-Type and Connection headers.
 	// examples:
 	//   - name: StopMagic
 	//     value: false
 	StopMagic bool `yaml:"stop_magic" koanf:"stop_magic,omitempty"`
 
 	// description: |
-	//   EncodedRequest allows you to declare which port on the destination host the tests should connect to.
+	//   EncodedRequest will take a base64 encoded string that will be decoded and sent through as the request.
+	//   It will override all other settings
 	// examples:
 	//   - name: EncodedRequest
 	//     value: "\"a\""
@@ -278,7 +279,7 @@ type Output struct {
 	LogContains string `yaml:"log_contains,omitempty"`
 
 	// description: |
-	//   NoLogContains describes the text that should be contained in the WAF logs.
+	//   NoLogContains describes the text that should not be contained in the WAF logs.
 	// examples:
 	//   - name: NoLogContains
 	//     value: "\"id 920100\""
