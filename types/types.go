@@ -184,28 +184,28 @@ type Input struct {
 	Port *int `yaml:"port,omitempty" koanf:"port,omitempty"`
 
 	// description: |
-	//   Protocol allows you to declare which protocol the test should use to send the request.
+	//   Protocol allows you to declare which protocol the test should use when sending the request.
 	// examples:
 	//   - name: Protocol
 	//     value: "\"http\""
 	Protocol *string `yaml:"protocol,omitempty" koanf:"protocol,omitempty"`
 
 	// description: |
-	//   URI allows you to declare the URI the test should use to send the request.
+	//   URI allows you to declare the URI the test should use as part of the request line.
 	// examples:
 	//   - name: URI
 	//     value: "\"/get?hello=world\""
 	URI *string `yaml:"uri,omitempty" koanf:"uri,omitempty"`
 
 	// description: |
-	//   Version allows you to declare the HTTP version the test should use to send the request.
+	//   Version allows you to declare the HTTP version the test should use as part of the request line.
 	// examples:
 	//   - name: Version
 	//     value: "\"1.1\""
 	Version *string `yaml:"version,omitempty" koanf:"version,omitempty"`
 
 	// description: |
-	//   Method allows you to declare the HTTP method the test should use.
+	//   Method allows you to declare the HTTP method the test should use as part of the request line.
 	// examples:
 	//   - name: Method
 	//     value: "\"GET\""
@@ -219,7 +219,7 @@ type Input struct {
 	Headers map[string]string `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
-	//   Data allows you to declare the payload that the test should send.
+	//   Data allows you to declare the payload that the test should in the request body.
 	// examples:
 	//   - name: Data
 	//     value: "\"Bibitti bopi\""
