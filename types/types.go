@@ -9,6 +9,10 @@ func intPtr(i int) *int {
 	return &i
 }
 
+func boolPtr(b bool) *bool {
+	return &b
+}
+
 func strPtr(s string) *string {
 	return &s
 }
@@ -29,24 +33,25 @@ var (
 		"Accept":     "*/*",
 	}
 	exampleInput = Input{
-		DestAddr:       strPtr("192.168.0.1"),
-		Port:           intPtr(8080),
-		Protocol:       strPtr("http"),
-		URI:            strPtr("/test"),
-		Version:        strPtr("HTTP/1.1"),
-		Headers:        exampleHeaders,
-		Method:         strPtr("REPORT"),
-		Data:           nil,
-		EncodedRequest: "TXkgRGF0YQo=",
-		SaveCookie:     false,
-		StopMagic:      false,
+		DestAddr:            strPtr("192.168.0.1"),
+		Port:                intPtr(8080),
+		Protocol:            strPtr("http"),
+		URI:                 strPtr("/test"),
+		Version:             strPtr("HTTP/1.1"),
+		Headers:             exampleHeaders,
+		Method:              strPtr("REPORT"),
+		Data:                nil,
+		EncodedRequest:      "TXkgRGF0YQo=",
+		SaveCookie:          boolPtr(false),
+		StopMagic:           boolPtr(true),
+		AutocompleteHeaders: boolPtr(false),
 	}
 	exampleOutput = Output{
 		Status:           []int{200},
 		ResponseContains: "",
 		LogContains:      "nothing",
 		NoLogContains:    "",
-		ExpectError:      true,
+		ExpectError:      boolPtr(true),
 	}
 )
 
@@ -90,7 +95,7 @@ type Meta struct {
 	// examples:
 	//   - name: Enabled
 	//     value: false
-	Enabled bool `yaml:"enabled,omitempty"`
+	Enabled *bool `yaml:"enabled,omitempty"`
 
 	// description: |
 	//   Name is the name of the tests contained in this file.
@@ -230,14 +235,22 @@ type Input struct {
 	// examples:
 	//   - name: SaveCookie
 	//     value: 80
-	SaveCookie bool `yaml:"save_cookie,omitempty" koanf:"save_cookie,omitempty"`
+	SaveCookie *bool `yaml:"save_cookie,omitempty" koanf:"save_cookie,omitempty"`
 
 	// description: |
-	//   StopMagic blocks the test framework to automatically fill the request with Content-Type and Connection headers.
+	//   StopMagic is deprecated.
 	// examples:
 	//   - name: StopMagic
 	//     value: false
-	StopMagic bool `yaml:"stop_magic" koanf:"stop_magic,omitempty"`
+	StopMagic *bool `yaml:"stop_magic" koanf:"stop_magic,omitempty"`
+
+	// description: |
+	//   AutocompleteHeaders allows the test framework to automatically fill the request with Content-Type and Connection headers.
+	//   Defaults to true.
+	// examples:
+	//   - name: StopMagic
+	//     value: false
+	AutocompleteHeaders *bool `yaml:"autocomplete_headers" koanf:"autocomplete_headers,omitempty"`
 
 	// description: |
 	//   EncodedRequest will take a base64 encoded string that will be decoded and sent through as the request.
@@ -290,5 +303,5 @@ type Output struct {
 	// examples:
 	//   - name: ExpectError
 	//     value: false
-	ExpectError bool `yaml:"expect_error,omitempty"`
+	ExpectError *bool `yaml:"expect_error,omitempty"`
 }
