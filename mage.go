@@ -1,4 +1,4 @@
-// Copyright 2022 Juan Pablo Tosso and the OWASP Coraza contributors
+// Copyright 2023 CRS
 // SPDX-License-Identifier: Apache-2.0
 
 //go:build ignore

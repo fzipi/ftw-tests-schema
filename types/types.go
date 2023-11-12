@@ -1,59 +1,10 @@
-package test
-
-// Copyright 2023 Felipe Zipitria
+// Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate dstdocgen -package test -path . -structure FTWTest -output ./test_doc.go
+//go:generate dstdocgen -package types -path . -structure FTWTest -output ./test_doc.go
+//go:generate dstdocgen -package types -path . -structure FTWOverrides -output ./overrides_doc.go
 
-func intPtr(i int) *int {
-	return &i
-}
-
-func boolPtr(b bool) *bool {
-	return &b
-}
-
-func strPtr(s string) *string {
-	return &s
-}
-
-var (
-	exampleStageData = StageData{
-		Input:  exampleInput,
-		Output: ExampleOutput,
-	}
-	exampleStages = []Stage{
-		{
-			exampleStageData,
-		},
-	}
-	exampleHeaders = map[string]string{
-		"User-Agent": "CRS Tests",
-		"Host":       "localhost",
-		"Accept":     "*/*",
-	}
-	exampleInput = Input{
-		DestAddr:            strPtr("192.168.0.1"),
-		Port:                intPtr(8080),
-		Protocol:            strPtr("http"),
-		URI:                 strPtr("/test"),
-		Version:             strPtr("HTTP/1.1"),
-		Headers:             exampleHeaders,
-		Method:              strPtr("REPORT"),
-		Data:                nil,
-		EncodedRequest:      "TXkgRGF0YQo=",
-		SaveCookie:          boolPtr(false),
-		StopMagic:           boolPtr(true),
-		AutocompleteHeaders: boolPtr(false),
-	}
-	ExampleOutput = Output{
-		Status:           []int{200},
-		ResponseContains: "",
-		LogContains:      "nothing",
-		NoLogContains:    "",
-		ExpectError:      boolPtr(true),
-	}
-)
+package types
 
 // Welcome to the FTW YAMLFormat documentation.
 // In this document we will explain all the possible options that can be used within the YAML format.
@@ -64,7 +15,7 @@ var (
 type FTWTest struct {
 	// description: |
 	//   Meta describes the metadata information of this yaml test file
-	Meta Meta `yaml:"meta"`
+	Meta FTWTestMeta `yaml:"meta"`
 
 	// description: |
 	//   FileName is the name of the file where these tests are.
@@ -81,8 +32,8 @@ type FTWTest struct {
 	Tests []Test `yaml:"tests"`
 }
 
-// Meta describes the metadata information of this yaml test file
-type Meta struct {
+// FTWTestMeta describes the metadata information of this yaml test file
+type FTWTestMeta struct {
 	// description: |
 	//   Author is the list of authors that added content to this file
 	// examples:
@@ -271,11 +222,11 @@ type Input struct {
 // Output is the response expected from the test
 type Output struct {
 	// description: |
-	//   Status describes the HTTP status error code expected as response.
+	//   Status describes the HTTP status code expected in the response.
 	// examples:
 	//   - name: Status
-	//     value: [200]
-	Status []int `yaml:"status,flow,omitempty"`
+	//     value: 200
+	Status int `yaml:"status,omitempty"`
 
 	// description: |
 	//   ResponseContains describes the text that should be contained in the HTTP response.
@@ -289,6 +240,8 @@ type Output struct {
 	// examples:
 	//   - name: LogContains
 	//     value: "\"id 920100\""
+	//
+	// deprecated: use Log instead
 	LogContains string `yaml:"log_contains,omitempty"`
 
 	// description: |
@@ -296,7 +249,15 @@ type Output struct {
 	// examples:
 	//   - name: NoLogContains
 	//     value: "\"id 920100\""
+	//
+	// deprecated: use Log instead
 	NoLogContains string `yaml:"no_log_contains,omitempty"`
+
+	// description: |
+	//   Log is used to configure expectations about the log contents.
+	// examples:
+	//   - value: exampleLog
+	Log Log `yaml:"log,omitempty"`
 
 	// description: |
 	//   When `ExpectError` is true, we don't expect an answer from the WAF, just an error.
@@ -304,4 +265,108 @@ type Output struct {
 	//   - name: ExpectError
 	//     value: false
 	ExpectError *bool `yaml:"expect_error,omitempty"`
+}
+
+// Log is used to configure expectations about the log contents.
+type Log struct {
+	// description: |
+	//   Expect the given ID to be contained in the log output.
+	// examples:
+	//   - exampleLog.ExpectId
+	ExpectId int `yaml:"expect_id,omitempty"`
+
+	// description: |
+	//   Expect the given ID _not_ to be contained in the log output.
+	// examples:
+	//   - exampleLog.NoExpectId
+	NoExpectId int `yaml:"expect_id,omitempty"`
+
+	// description: |
+	//   Expect the regular expression to match log content for the current test.
+	// examples:
+	//   - value: exampleLog.MatchRegex
+	MatchRegex string `yaml:"match_regex,omitempty"`
+
+	// description: |
+	//   Expect the regular expression to _not_ match log content for the current test.
+	// examples:
+	//   - value: exampleLog.NoMatchRegex
+	NoMatchRegex string `yaml:"no_match_regex,omitempty"`
+}
+
+// FTWOverrides describes platform specific overrides for tests
+type FTWOverrides struct {
+	// description: |
+	//    The version field designates the version of the schema that validates this file
+	// examples:
+	//     - value: "\"v0.1.0\""
+	Version string `yaml:"version"`
+
+	// description: |
+	//    Meta describes the metadata information
+	// examples:
+	//     - value: metaExample
+	Meta FTWOverridesMeta `yaml:"meta"`
+
+	// description: |
+	//    List of test override specifications
+	// examples:
+	//     - value: testOverridesExample
+	TestOverrides []TestOverride `yaml:"test_overrides"`
+}
+
+// FTWOverridesMeta describes the metadata information of this yaml file
+type FTWOverridesMeta struct {
+	// description: |
+	//    The name of the WAF engine the tests are expected to run against
+	// examples:
+	//    - value: "\"coraza\""
+	Engine string `yaml:"engine"`
+
+	// description: |
+	//    The name of the platform (e.g., web server) the tests are expected to run against
+	// examples:
+	//    - value: "\"nginx\""
+	Platform string `yaml:"platform"`
+
+	// description: |
+	//     Custom annotations; can be used to add additional meta information
+	// examples:
+	//     - value: annotationsExample
+	Annotations map[string]string `yaml:"annotations"`
+}
+
+// TestOverride describes overrides for a single test
+type TestOverride struct {
+	// description: |
+	//     ID of the rule this test targets.
+	// examples:
+	//     - value: 920100
+	RuleId int `yaml:"rule_id"`
+
+	// description: |
+	//     IDs of the tests for rule_id that overrides should be applied to.
+	//     If this field is not set, the overrides will be applied to all tests of rule_id.
+	// examples:
+	//     - value: [5, 6]
+	TestIds []int `yaml:"test_ids,omitempty"`
+
+	// description: |
+	//    Describes why this override is necessary.
+	// examples:
+	//     - value: reasonExample
+	Reason string `yaml:"reason"`
+
+	// description: |
+	//     Whether this test is expected to fail for this particular configuration.
+	//     Default: false
+	// examples:
+	//     - value: true
+	ExpectFailure *bool `yaml:"expect_failure,omitempty"`
+
+	// description: |
+	//     Specifies overrides on the test output
+	// examples:
+	//     - value: 400
+	Output Output `yaml:"output"`
 }
