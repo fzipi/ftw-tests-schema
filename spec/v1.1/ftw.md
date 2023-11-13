@@ -46,8 +46,37 @@ Examples:
 
 
 ```yaml
-# Tests
-tests: the tests
+tests:
+    - test_title: 123456-1
+      rule_id: 0
+      test_id: 0
+      desc: Unix RCE using `time`
+      stages:
+        - description: Get cookie from server
+          input:
+            dest_addr: 192.168.0.1
+            port: 8080
+            protocol: http
+            uri: /test
+            version: HTTP/1.1
+            method: REPORT
+            headers:
+                Accept: '*/*'
+                Host: localhost
+                User-Agent: CRS Tests
+            save_cookie: false
+            stop_magic: true
+            autocomplete_headers: false
+            encoded_request: TXkgRGF0YQo=
+          output:
+            status: 200
+            log_contains: nothing
+            log:
+                expect_id: 123456
+                no_expect_id: 123456
+                match_regex: id[:\s"]*123456
+                no_match_regex: id[:\s"]*123456
+            expect_error: true
 ```
 
 
@@ -205,8 +234,36 @@ Appears in:
 
 
 ```yaml
-# Tests
-the tests
+- test_title: 123456-1
+  rule_id: 0
+  test_id: 0
+  desc: Unix RCE using `time`
+  stages:
+    - description: Get cookie from server
+      input:
+        dest_addr: 192.168.0.1
+        port: 8080
+        protocol: http
+        uri: /test
+        version: HTTP/1.1
+        method: REPORT
+        headers:
+            Accept: '*/*'
+            Host: localhost
+            User-Agent: CRS Tests
+        save_cookie: false
+        stop_magic: true
+        autocomplete_headers: false
+        encoded_request: TXkgRGF0YQo=
+      output:
+        status: 200
+        log_contains: nothing
+        log:
+            expect_id: 123456
+            no_expect_id: 123456
+            match_regex: id[:\s"]*123456
+            no_match_regex: id[:\s"]*123456
+        expect_error: true
 ```
 
 
@@ -220,7 +277,7 @@ the tests
 </div>
 <div class="dt">
 
-TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
+TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
 
 
 
@@ -228,8 +285,55 @@ Examples:
 
 
 ```yaml
-# TestTitle
-test_title: 920100-1
+test_title: 123456-1
+```
+
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>rule_id</code>  <i>int</i>
+
+</div>
+<div class="dt">
+
+RuleId is the ID of the rule this test targets
+
+
+
+Examples:
+
+
+```yaml
+# RuleId
+rule_id: 123456
+```
+
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>test_id</code>  <i>int</i>
+
+</div>
+<div class="dt">
+
+TestId is the ID of the test, in relation to `rule_id`
+
+
+
+Examples:
+
+
+```yaml
+# TestId
+test_id: 4
 ```
 
 
@@ -253,8 +357,7 @@ Examples:
 
 
 ```yaml
-# TestDescription
-desc: This test targets something
+desc: Unix RCE using `time`
 ```
 
 
@@ -277,33 +380,32 @@ Examples:
 
 
 ```yaml
-# Stages
 stages:
-    - stage:
-        input:
-            dest_addr: 192.168.0.1
-            port: 8080
-            protocol: http
-            uri: /test
-            version: HTTP/1.1
-            method: REPORT
-            headers:
-                Accept: '*/*'
-                Host: localhost
-                User-Agent: CRS Tests
-            save_cookie: false
-            stop_magic: true
-            autocomplete_headers: false
-            encoded_request: TXkgRGF0YQo=
-        output:
-            status: 200
-            log_contains: nothing
-            log:
-                expect_id: 123456
-                expect_id: 123456
-                match_regex: id[:\s"]*123456
-                no_match_regex: id[:\s"]*123456
-            expect_error: true
+    - description: Get cookie from server
+      input:
+        dest_addr: 192.168.0.1
+        port: 8080
+        protocol: http
+        uri: /test
+        version: HTTP/1.1
+        method: REPORT
+        headers:
+            Accept: '*/*'
+            Host: localhost
+            User-Agent: CRS Tests
+        save_cookie: false
+        stop_magic: true
+        autocomplete_headers: false
+        encoded_request: TXkgRGF0YQo=
+      output:
+        status: 200
+        log_contains: nothing
+        log:
+            expect_id: 123456
+            no_expect_id: 123456
+            match_regex: id[:\s"]*123456
+            no_match_regex: id[:\s"]*123456
+        expect_error: true
 ```
 
 
@@ -324,32 +426,31 @@ Appears in:
 
 
 ```yaml
-# Stages
-- stage:
-    input:
-        dest_addr: 192.168.0.1
-        port: 8080
-        protocol: http
-        uri: /test
-        version: HTTP/1.1
-        method: REPORT
-        headers:
-            Accept: '*/*'
-            Host: localhost
-            User-Agent: CRS Tests
-        save_cookie: false
-        stop_magic: true
-        autocomplete_headers: false
-        encoded_request: TXkgRGF0YQo=
-    output:
-        status: 200
-        log_contains: nothing
-        log:
-            expect_id: 123456
-            expect_id: 123456
-            match_regex: id[:\s"]*123456
-            no_match_regex: id[:\s"]*123456
-        expect_error: true
+- description: Get cookie from server
+  input:
+    dest_addr: 192.168.0.1
+    port: 8080
+    protocol: http
+    uri: /test
+    version: HTTP/1.1
+    method: REPORT
+    headers:
+        Accept: '*/*'
+        Host: localhost
+        User-Agent: CRS Tests
+    save_cookie: false
+    stop_magic: true
+    autocomplete_headers: false
+    encoded_request: TXkgRGF0YQo=
+  output:
+    status: 200
+    log_contains: nothing
+    log:
+        expect_id: 123456
+        no_expect_id: 123456
+        match_regex: id[:\s"]*123456
+        no_match_regex: id[:\s"]*123456
+    expect_error: true
 ```
 
 
@@ -363,7 +464,20 @@ Appears in:
 </div>
 <div class="dt">
 
-StageData is an individual test stage
+StageData is an individual test stage.
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>description</code>  <i>string</i>
+
+</div>
+<div class="dt">
+
+Describes the purpose of this stage.
 
 
 
@@ -371,32 +485,77 @@ Examples:
 
 
 ```yaml
-# StageData
-stage:
-    input:
-        dest_addr: 192.168.0.1
-        port: 8080
-        protocol: http
-        uri: /test
-        version: HTTP/1.1
-        method: REPORT
-        headers:
-            Accept: '*/*'
-            Host: localhost
-            User-Agent: CRS Tests
-        save_cookie: false
-        stop_magic: true
-        autocomplete_headers: false
-        encoded_request: TXkgRGF0YQo=
-    output:
-        status: 200
-        log_contains: nothing
-        log:
-            expect_id: 123456
-            expect_id: 123456
-            match_regex: id[:\s"]*123456
-            no_match_regex: id[:\s"]*123456
-        expect_error: true
+description: Get cookie from server
+```
+
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>input</code>  <i><a href="#input">Input</a></i>
+
+</div>
+<div class="dt">
+
+Input is the data that is passed to the test
+
+
+
+Examples:
+
+
+```yaml
+# Input
+input:
+    dest_addr: 192.168.0.1
+    port: 8080
+    protocol: http
+    uri: /test
+    version: HTTP/1.1
+    method: REPORT
+    headers:
+        Accept: '*/*'
+        Host: localhost
+        User-Agent: CRS Tests
+    save_cookie: false
+    stop_magic: true
+    autocomplete_headers: false
+    encoded_request: TXkgRGF0YQo=
+```
+
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>output</code>  <i><a href="#output">Output</a></i>
+
+</div>
+<div class="dt">
+
+Output is the data that is returned from the test
+
+
+
+Examples:
+
+
+```yaml
+# Output
+output:
+    status: 200
+    log_contains: nothing
+    log:
+        expect_id: 123456
+        no_expect_id: 123456
+        match_regex: id[:\s"]*123456
+        no_match_regex: id[:\s"]*123456
+    expect_error: true
 ```
 
 
@@ -416,33 +575,6 @@ Appears in:
 - <code><a href="#stage">Stage</a>.stage</code>
 
 
-```yaml
-# StageData
-input:
-    dest_addr: 192.168.0.1
-    port: 8080
-    protocol: http
-    uri: /test
-    version: HTTP/1.1
-    method: REPORT
-    headers:
-        Accept: '*/*'
-        Host: localhost
-        User-Agent: CRS Tests
-    save_cookie: false
-    stop_magic: true
-    autocomplete_headers: false
-    encoded_request: TXkgRGF0YQo=
-output:
-    status: 200
-    log_contains: nothing
-    log:
-        expect_id: 123456
-        expect_id: 123456
-        match_regex: id[:\s"]*123456
-        no_match_regex: id[:\s"]*123456
-    expect_error: true
-```
 
 
 
@@ -507,7 +639,7 @@ output:
     log_contains: nothing
     log:
         expect_id: 123456
-        expect_id: 123456
+        no_expect_id: 123456
         match_regex: id[:\s"]*123456
         no_match_regex: id[:\s"]*123456
     expect_error: true
@@ -527,9 +659,28 @@ output:
 Appears in:
 
 
+- <code><a href="#stage">Stage</a>.input</code>
+
 - <code><a href="#stagedata">StageData</a>.input</code>
 
 
+```yaml
+# Input
+dest_addr: 192.168.0.1
+port: 8080
+protocol: http
+uri: /test
+version: HTTP/1.1
+method: REPORT
+headers:
+    Accept: '*/*'
+    Host: localhost
+    User-Agent: CRS Tests
+save_cookie: false
+stop_magic: true
+autocomplete_headers: false
+encoded_request: TXkgRGF0YQo=
+```
 ```yaml
 # Input
 dest_addr: 192.168.0.1
@@ -878,6 +1029,8 @@ raw_request: TXkgRGF0YQo=
 Appears in:
 
 
+- <code><a href="#stage">Stage</a>.output</code>
+
 - <code><a href="#stagedata">StageData</a>.output</code>
 
 
@@ -887,7 +1040,18 @@ status: 200
 log_contains: nothing
 log:
     expect_id: 123456
+    no_expect_id: 123456
+    match_regex: id[:\s"]*123456
+    no_match_regex: id[:\s"]*123456
+expect_error: true
+```
+```yaml
+# Output
+status: 200
+log_contains: nothing
+log:
     expect_id: 123456
+    no_expect_id: 123456
     match_regex: id[:\s"]*123456
     no_match_regex: id[:\s"]*123456
 expect_error: true
@@ -1010,7 +1174,7 @@ Examples:
 ```yaml
 log:
     expect_id: 123456
-    expect_id: 123456
+    no_expect_id: 123456
     match_regex: id[:\s"]*123456
     no_match_regex: id[:\s"]*123456
 ```
@@ -1058,7 +1222,7 @@ Appears in:
 
 ```yaml
 expect_id: 123456
-expect_id: 123456
+no_expect_id: 123456
 match_regex: id[:\s"]*123456
 no_match_regex: id[:\s"]*123456
 ```
@@ -1074,10 +1238,17 @@ no_match_regex: id[:\s"]*123456
 </div>
 <div class="dt">
 
-description: |
-   Expect the given ID to be contained in the log output.
- examples:
-   - exampleLog.ExpectId
+Expect the given ID to be contained in the log output.
+
+
+
+Examples:
+
+
+```yaml
+expect_id: 123456
+```
+
 
 </div>
 
@@ -1085,15 +1256,22 @@ description: |
 
 <div class="dd">
 
-<code>expect_id</code>  <i>int</i>
+<code>no_expect_id</code>  <i>int</i>
 
 </div>
 <div class="dt">
 
-description: |
-   Expect the given ID _not_ to be contained in the log output.
- examples:
-   - exampleLog.NoExpectId
+Expect the given ID _not_ to be contained in the log output.
+
+
+
+Examples:
+
+
+```yaml
+no_expect_id: 123456
+```
+
 
 </div>
 
@@ -1230,9 +1408,7 @@ Examples:
 ```yaml
 test_overrides:
     - rule_id: 920100
-      test_ids:
-        - 4
-        - 6
+      test_ids: [4, 6]
       reason: |-
         nginx returns 400 when `Content-Length` header is sent in a
         `Transfer-Encoding: chunked` request.
@@ -1242,7 +1418,7 @@ test_overrides:
         log_contains: nothing
         log:
             expect_id: 123456
-            expect_id: 123456
+            no_expect_id: 123456
             match_regex: id[:\s"]*123456
             no_match_regex: id[:\s"]*123456
         expect_error: true
@@ -1362,9 +1538,7 @@ Appears in:
 
 ```yaml
 - rule_id: 920100
-  test_ids:
-    - 4
-    - 6
+  test_ids: [4, 6]
   reason: |-
     nginx returns 400 when `Content-Length` header is sent in a
     `Transfer-Encoding: chunked` request.
@@ -1374,7 +1548,7 @@ Appears in:
     log_contains: nothing
     log:
         expect_id: 123456
-        expect_id: 123456
+        no_expect_id: 123456
         match_regex: id[:\s"]*123456
         no_match_regex: id[:\s"]*123456
     expect_error: true
@@ -1414,11 +1588,20 @@ rule_id: 920100
 </div>
 <div class="dt">
 
-description: |
-     IDs of the tests for rule_id that overrides should be applied to.
-     If this field is not set, the overrides will be applied to all tests of rule_id.
- examples:
-     - value: [5, 6]
+IDs of the tests for rule_id that overrides should be applied to.
+If this field is not set, the overrides will be applied to all tests of rule_id.
+
+
+
+Examples:
+
+
+```yaml
+test_ids:
+    - 4
+    - 6
+```
+
 
 </div>
 
@@ -1466,6 +1649,31 @@ Examples:
 
 ```yaml
 expect_failure: true
+```
+
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>retry_once</code>  <i>bool</i>
+
+</div>
+<div class="dt">
+
+Whether a stage should be retried once in case of failure.
+This option is primarily a workaround for a race condition in phase 5,
+where the log entry of a rule may be flushed after the test end marker.
+
+
+
+Examples:
+
+
+```yaml
+retry_once: true
 ```
 
 
@@ -1629,7 +1837,7 @@ Examples:
 ```yaml
 log:
     expect_id: 123456
-    expect_id: 123456
+    no_expect_id: 123456
     match_regex: id[:\s"]*123456
     no_match_regex: id[:\s"]*123456
 ```
@@ -1677,7 +1885,7 @@ Appears in:
 
 ```yaml
 expect_id: 123456
-expect_id: 123456
+no_expect_id: 123456
 match_regex: id[:\s"]*123456
 no_match_regex: id[:\s"]*123456
 ```
@@ -1693,10 +1901,17 @@ no_match_regex: id[:\s"]*123456
 </div>
 <div class="dt">
 
-description: |
-   Expect the given ID to be contained in the log output.
- examples:
-   - exampleLog.ExpectId
+Expect the given ID to be contained in the log output.
+
+
+
+Examples:
+
+
+```yaml
+expect_id: 123456
+```
+
 
 </div>
 
@@ -1704,15 +1919,22 @@ description: |
 
 <div class="dd">
 
-<code>expect_id</code>  <i>int</i>
+<code>no_expect_id</code>  <i>int</i>
 
 </div>
 <div class="dt">
 
-description: |
-   Expect the given ID _not_ to be contained in the log output.
- examples:
-   - exampleLog.NoExpectId
+Expect the given ID _not_ to be contained in the log output.
+
+
+
+Examples:
+
+
+```yaml
+no_expect_id: 123456
+```
+
 
 </div>
 

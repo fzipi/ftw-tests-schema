@@ -35,7 +35,7 @@ func init() {
 	FTWTestDoc.Fields[1].Description = "Tests is a list of FTW tests"
 	FTWTestDoc.Fields[1].Comments[encoder.LineComment] = "Tests is a list of FTW tests"
 
-	FTWTestDoc.Fields[1].AddExample("Tests", "the tests")
+	FTWTestDoc.Fields[1].AddExample("", exampleTests)
 
 	FTWTestMetaDoc.Type = "FTWTestMeta"
 	FTWTestMetaDoc.Comments[encoder.LineComment] = ""
@@ -87,61 +87,92 @@ func init() {
 	TestDoc.Comments[encoder.LineComment] = ""
 	TestDoc.Description = ""
 
-	TestDoc.AddExample("Tests", "the tests")
+	TestDoc.AddExample("", exampleTests)
 	TestDoc.AppearsIn = []encoder.Appearance{
 		{
 			TypeName:  "FTWTest",
 			FieldName: "tests",
 		},
 	}
-	TestDoc.Fields = make([]encoder.Doc, 3)
+	TestDoc.Fields = make([]encoder.Doc, 5)
 	TestDoc.Fields[0].Name = "test_title"
 	TestDoc.Fields[0].Type = "string"
 	TestDoc.Fields[0].Note = ""
-	TestDoc.Fields[0].Description = "TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool."
-	TestDoc.Fields[0].Comments[encoder.LineComment] = "TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool."
+	TestDoc.Fields[0].Description = "TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool."
+	TestDoc.Fields[0].Comments[encoder.LineComment] = "TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool."
 
-	TestDoc.Fields[0].AddExample("TestTitle", "920100-1")
-	TestDoc.Fields[1].Name = "desc"
-	TestDoc.Fields[1].Type = "string"
+	TestDoc.Fields[0].AddExample("", exampleTest.TestTitle)
+	TestDoc.Fields[1].Name = "rule_id"
+	TestDoc.Fields[1].Type = "int"
 	TestDoc.Fields[1].Note = ""
-	TestDoc.Fields[1].Description = "TestDescription is the description for this particular test. Should be used to describe the internals of\nthe specific things this test is targeting."
-	TestDoc.Fields[1].Comments[encoder.LineComment] = "TestDescription is the description for this particular test. Should be used to describe the internals of"
+	TestDoc.Fields[1].Description = "RuleId is the ID of the rule this test targets"
+	TestDoc.Fields[1].Comments[encoder.LineComment] = "RuleId is the ID of the rule this test targets"
 
-	TestDoc.Fields[1].AddExample("TestDescription", "This test targets something")
-	TestDoc.Fields[2].Name = "stages"
-	TestDoc.Fields[2].Type = "[]Stage"
+	TestDoc.Fields[1].AddExample("RuleId", 123456)
+	TestDoc.Fields[2].Name = "test_id"
+	TestDoc.Fields[2].Type = "int"
 	TestDoc.Fields[2].Note = ""
-	TestDoc.Fields[2].Description = "Stages is the list of all the stages to perform this test."
-	TestDoc.Fields[2].Comments[encoder.LineComment] = "Stages is the list of all the stages to perform this test."
+	TestDoc.Fields[2].Description = "TestId is the ID of the test, in relation to `rule_id`"
+	TestDoc.Fields[2].Comments[encoder.LineComment] = "TestId is the ID of the test, in relation to `rule_id`"
 
-	TestDoc.Fields[2].AddExample("Stages", exampleStages)
+	TestDoc.Fields[2].AddExample("TestId", 4)
+	TestDoc.Fields[3].Name = "desc"
+	TestDoc.Fields[3].Type = "string"
+	TestDoc.Fields[3].Note = ""
+	TestDoc.Fields[3].Description = "TestDescription is the description for this particular test. Should be used to describe the internals of\nthe specific things this test is targeting."
+	TestDoc.Fields[3].Comments[encoder.LineComment] = "TestDescription is the description for this particular test. Should be used to describe the internals of"
+
+	TestDoc.Fields[3].AddExample("", exampleTest.TestDescription)
+	TestDoc.Fields[4].Name = "stages"
+	TestDoc.Fields[4].Type = "[]Stage"
+	TestDoc.Fields[4].Note = ""
+	TestDoc.Fields[4].Description = "Stages is the list of all the stages to perform this test."
+	TestDoc.Fields[4].Comments[encoder.LineComment] = "Stages is the list of all the stages to perform this test."
+
+	TestDoc.Fields[4].AddExample("", exampleStages)
 
 	StageDoc.Type = "Stage"
 	StageDoc.Comments[encoder.LineComment] = ""
 	StageDoc.Description = ""
 
-	StageDoc.AddExample("Stages", exampleStages)
+	StageDoc.AddExample("", exampleStages)
 	StageDoc.AppearsIn = []encoder.Appearance{
 		{
 			TypeName:  "Test",
 			FieldName: "stages",
 		},
 	}
-	StageDoc.Fields = make([]encoder.Doc, 1)
+	StageDoc.Fields = make([]encoder.Doc, 4)
 	StageDoc.Fields[0].Name = "stage"
 	StageDoc.Fields[0].Type = "StageData"
 	StageDoc.Fields[0].Note = ""
-	StageDoc.Fields[0].Description = "StageData is an individual test stage"
-	StageDoc.Fields[0].Comments[encoder.LineComment] = "StageData is an individual test stage"
+	StageDoc.Fields[0].Description = "StageData is an individual test stage."
+	StageDoc.Fields[0].Comments[encoder.LineComment] = "StageData is an individual test stage."
+	StageDoc.Fields[1].Name = "description"
+	StageDoc.Fields[1].Type = "string"
+	StageDoc.Fields[1].Note = ""
+	StageDoc.Fields[1].Description = "Describes the purpose of this stage."
+	StageDoc.Fields[1].Comments[encoder.LineComment] = "Describes the purpose of this stage."
 
-	StageDoc.Fields[0].AddExample("StageData", exampleStageData)
+	StageDoc.Fields[1].AddExample("", exampleStage.Description)
+	StageDoc.Fields[2].Name = "input"
+	StageDoc.Fields[2].Type = "Input"
+	StageDoc.Fields[2].Note = ""
+	StageDoc.Fields[2].Description = "Input is the data that is passed to the test"
+	StageDoc.Fields[2].Comments[encoder.LineComment] = "Input is the data that is passed to the test"
+
+	StageDoc.Fields[2].AddExample("Input", exampleInput)
+	StageDoc.Fields[3].Name = "output"
+	StageDoc.Fields[3].Type = "Output"
+	StageDoc.Fields[3].Note = ""
+	StageDoc.Fields[3].Description = "Output is the data that is returned from the test"
+	StageDoc.Fields[3].Comments[encoder.LineComment] = "Output is the data that is returned from the test"
+
+	StageDoc.Fields[3].AddExample("Output", exampleOutput)
 
 	StageDataDoc.Type = "StageData"
 	StageDataDoc.Comments[encoder.LineComment] = ""
 	StageDataDoc.Description = ""
-
-	StageDataDoc.AddExample("StageData", exampleStageData)
 	StageDataDoc.AppearsIn = []encoder.Appearance{
 		{
 			TypeName:  "Stage",
@@ -169,7 +200,13 @@ func init() {
 	InputDoc.Description = ""
 
 	InputDoc.AddExample("Input", exampleInput)
+
+	InputDoc.AddExample("Input", exampleInput)
 	InputDoc.AppearsIn = []encoder.Appearance{
+		{
+			TypeName:  "Stage",
+			FieldName: "input",
+		},
 		{
 			TypeName:  "StageData",
 			FieldName: "input",
@@ -273,7 +310,13 @@ func init() {
 	FTWTestOutputDoc.Description = ""
 
 	FTWTestOutputDoc.AddExample("Output", exampleOutput)
+
+	FTWTestOutputDoc.AddExample("Output", exampleOutput)
 	FTWTestOutputDoc.AppearsIn = []encoder.Appearance{
+		{
+			TypeName:  "Stage",
+			FieldName: "output",
+		},
 		{
 			TypeName:  "StageData",
 			FieldName: "output",
@@ -338,13 +381,17 @@ func init() {
 	FTWTestLogDoc.Fields[0].Name = "expect_id"
 	FTWTestLogDoc.Fields[0].Type = "int"
 	FTWTestLogDoc.Fields[0].Note = ""
-	FTWTestLogDoc.Fields[0].Description = "description: |\n   Expect the given ID to be contained in the log output.\n examples:\n   - exampleLog.ExpectId"
-	FTWTestLogDoc.Fields[0].Comments[encoder.LineComment] = " description: |"
-	FTWTestLogDoc.Fields[1].Name = "expect_id"
+	FTWTestLogDoc.Fields[0].Description = "Expect the given ID to be contained in the log output."
+	FTWTestLogDoc.Fields[0].Comments[encoder.LineComment] = "Expect the given ID to be contained in the log output."
+
+	FTWTestLogDoc.Fields[0].AddExample("", exampleLog.ExpectId)
+	FTWTestLogDoc.Fields[1].Name = "no_expect_id"
 	FTWTestLogDoc.Fields[1].Type = "int"
 	FTWTestLogDoc.Fields[1].Note = ""
-	FTWTestLogDoc.Fields[1].Description = "description: |\n   Expect the given ID _not_ to be contained in the log output.\n examples:\n   - exampleLog.NoExpectId"
-	FTWTestLogDoc.Fields[1].Comments[encoder.LineComment] = " description: |"
+	FTWTestLogDoc.Fields[1].Description = "Expect the given ID _not_ to be contained in the log output."
+	FTWTestLogDoc.Fields[1].Comments[encoder.LineComment] = "Expect the given ID _not_ to be contained in the log output."
+
+	FTWTestLogDoc.Fields[1].AddExample("", exampleLog.NoExpectId)
 	FTWTestLogDoc.Fields[2].Name = "match_regex"
 	FTWTestLogDoc.Fields[2].Type = "string"
 	FTWTestLogDoc.Fields[2].Note = ""

@@ -4,14 +4,21 @@
 package types
 
 var (
-	exampleStageData = StageData{
-		Input:  exampleInput,
-		Output: exampleOutput,
+	exampleTests = []Test{
+		exampleTest,
+	}
+	exampleTest = Test{
+		TestTitle:       "123456-1",
+		TestDescription: "Unix RCE using `time`",
+		Stages:          exampleStages,
+	}
+	exampleStage = Stage{
+		Description: "Get cookie from server",
+		Input:       exampleInput,
+		Output:      exampleOutput,
 	}
 	exampleStages = []Stage{
-		{
-			exampleStageData,
-		},
+		exampleStage,
 	}
 	exampleHeaders = map[string]string{
 		"User-Agent": "CRS Tests",
@@ -40,7 +47,6 @@ var (
 		Log:              exampleLog,
 		ExpectError:      boolPtr(true),
 	}
-
 	exampleLog = Log{
 		ExpectId:     123456,
 		NoExpectId:   123456,

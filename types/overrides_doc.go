@@ -88,20 +88,21 @@ func init() {
 			FieldName: "test_overrides",
 		},
 	}
-	TestOverrideDoc.Fields = make([]encoder.Doc, 5)
+	TestOverrideDoc.Fields = make([]encoder.Doc, 6)
 	TestOverrideDoc.Fields[0].Name = "rule_id"
 	TestOverrideDoc.Fields[0].Type = "int"
 	TestOverrideDoc.Fields[0].Note = ""
 	TestOverrideDoc.Fields[0].Description = "ID of the rule this test targets."
 	TestOverrideDoc.Fields[0].Comments[encoder.LineComment] = "ID of the rule this test targets."
 
-	TestOverrideDoc.Fields[0].AddExample("", 920100)
+	TestOverrideDoc.Fields[0].AddExample("", testOverridesExample[0].RuleId)
 	TestOverrideDoc.Fields[1].Name = "test_ids"
 	TestOverrideDoc.Fields[1].Type = "[]int"
 	TestOverrideDoc.Fields[1].Note = ""
-	TestOverrideDoc.Fields[1].Description = "description: |\n     IDs of the tests for rule_id that overrides should be applied to.\n     If this field is not set, the overrides will be applied to all tests of rule_id.\n examples:\n     - value: [5, 6]"
-	TestOverrideDoc.Fields[1].Comments[encoder.LineComment] = " description: |"
+	TestOverrideDoc.Fields[1].Description = "IDs of the tests for rule_id that overrides should be applied to.\nIf this field is not set, the overrides will be applied to all tests of rule_id."
+	TestOverrideDoc.Fields[1].Comments[encoder.LineComment] = "IDs of the tests for rule_id that overrides should be applied to."
 
+	TestOverrideDoc.Fields[1].AddExample("", testOverridesExample[0].TestIds)
 	TestOverrideDoc.Fields[2].Name = "reason"
 	TestOverrideDoc.Fields[2].Type = "string"
 	TestOverrideDoc.Fields[2].Note = ""
@@ -116,13 +117,20 @@ func init() {
 	TestOverrideDoc.Fields[3].Comments[encoder.LineComment] = "Whether this test is expected to fail for this particular configuration."
 
 	TestOverrideDoc.Fields[3].AddExample("", true)
-	TestOverrideDoc.Fields[4].Name = "output"
-	TestOverrideDoc.Fields[4].Type = "Output"
+	TestOverrideDoc.Fields[4].Name = "retry_once"
+	TestOverrideDoc.Fields[4].Type = "bool"
 	TestOverrideDoc.Fields[4].Note = ""
-	TestOverrideDoc.Fields[4].Description = "Specifies overrides on the test output"
-	TestOverrideDoc.Fields[4].Comments[encoder.LineComment] = "Specifies overrides on the test output"
+	TestOverrideDoc.Fields[4].Description = "Whether a stage should be retried once in case of failure.\nThis option is primarily a workaround for a race condition in phase 5,\nwhere the log entry of a rule may be flushed after the test end marker."
+	TestOverrideDoc.Fields[4].Comments[encoder.LineComment] = "Whether a stage should be retried once in case of failure."
 
-	TestOverrideDoc.Fields[4].AddExample("", 400)
+	TestOverrideDoc.Fields[4].AddExample("", true)
+	TestOverrideDoc.Fields[5].Name = "output"
+	TestOverrideDoc.Fields[5].Type = "Output"
+	TestOverrideDoc.Fields[5].Note = ""
+	TestOverrideDoc.Fields[5].Description = "Specifies overrides on the test output"
+	TestOverrideDoc.Fields[5].Comments[encoder.LineComment] = "Specifies overrides on the test output"
+
+	TestOverrideDoc.Fields[5].AddExample("", 400)
 
 	OutputDoc.Type = "Output"
 	OutputDoc.Comments[encoder.LineComment] = ""
@@ -194,13 +202,17 @@ func init() {
 	LogDoc.Fields[0].Name = "expect_id"
 	LogDoc.Fields[0].Type = "int"
 	LogDoc.Fields[0].Note = ""
-	LogDoc.Fields[0].Description = "description: |\n   Expect the given ID to be contained in the log output.\n examples:\n   - exampleLog.ExpectId"
-	LogDoc.Fields[0].Comments[encoder.LineComment] = " description: |"
-	LogDoc.Fields[1].Name = "expect_id"
+	LogDoc.Fields[0].Description = "Expect the given ID to be contained in the log output."
+	LogDoc.Fields[0].Comments[encoder.LineComment] = "Expect the given ID to be contained in the log output."
+
+	LogDoc.Fields[0].AddExample("", exampleLog.ExpectId)
+	LogDoc.Fields[1].Name = "no_expect_id"
 	LogDoc.Fields[1].Type = "int"
 	LogDoc.Fields[1].Note = ""
-	LogDoc.Fields[1].Description = "description: |\n   Expect the given ID _not_ to be contained in the log output.\n examples:\n   - exampleLog.NoExpectId"
-	LogDoc.Fields[1].Comments[encoder.LineComment] = " description: |"
+	LogDoc.Fields[1].Description = "Expect the given ID _not_ to be contained in the log output."
+	LogDoc.Fields[1].Comments[encoder.LineComment] = "Expect the given ID _not_ to be contained in the log output."
+
+	LogDoc.Fields[1].AddExample("", exampleLog.NoExpectId)
 	LogDoc.Fields[2].Name = "match_regex"
 	LogDoc.Fields[2].Type = "string"
 	LogDoc.Fields[2].Note = ""

@@ -19,29 +19,40 @@ meta:
   description: "Simple YAML to test that the schema is working."
 tests:
   - test_title: 1234-1
+    rule_id: 1234
+    test_id: 1
     desc: "Test that the schema is working."
     stages:
-      - stage:
-          input:
-            dest_addr: "127.0.0.1"
-            port: 80
-            headers:
-              User-Agent: "FTW Schema Tests"
-              Host: "localhost"
-          output:
-            no_log_contains: 'id "1234"'
+      - input:
+          dest_addr: "192.168.0.1"
+          port: 8080
+          method: "REPORT"
+          headers:
+            User-Agent: "CRS Tests"
+            Host: "localhost"
+            Accept: "*/*"
+          encoded_request: "TXkgRGF0YQo="
+          uri: "/test"
+          protocol: "http"
+          autocomplete_headers: false
+          stop_magic: true
+          save_cookie: false
+        output:
+          status: 200
+          response_contains: ""
+          log_contains: "nothing"
+          no_log_contains: ""
   - test_title: 1234-2
     stages:
-      - stage:
-          input:
-            dest_addr: "127.0.0.1"
-            port: 80
-            method: "OPTIONS"
-            headers:
-              User-Agent: "FTW Schema Tests"
-              Host: "localhost"
-          output:
-            status: 200
+      - input:
+          dest_addr: "127.0.0.1"
+          port: 80
+          method: "OPTIONS"
+          headers:
+            User-Agent: "FTW Schema Tests"
+            Host: "localhost"
+        output:
+          status: 200
 `
 
 var ftwTest = &FTWTest{
@@ -55,22 +66,14 @@ var ftwTest = &FTWTest{
 	Tests: []Test{
 		{
 			TestTitle:       "1234-1",
+			RuleId:          1234,
+			TestId:          1,
 			TestDescription: "Test that the schema is working.",
 			Stages: []Stage{
 				{
-					SD: StageData{
-						Input: Input{
-							DestAddr: strPtr("127.0.0.1"),
-							Port:     intPtr(80),
-							Headers: map[string]string{
-								"User-Agent": "FTW Schema Tests",
-								"Host":       "localhost",
-							},
-						},
-						Output: Output{
-							NoLogContains: "id \"1234\"",
-						},
-					},
+					Description: exampleStage.Description,
+					Input:       exampleInput,
+					Output:      exampleOutput,
 				},
 			},
 		},
@@ -78,19 +81,17 @@ var ftwTest = &FTWTest{
 			TestTitle: "1234-2",
 			Stages: []Stage{
 				{
-					SD: StageData{
-						Input: Input{
-							DestAddr: strPtr("127.0.0.1"),
-							Port:     intPtr(80),
-							Method:   strPtr("OPTIONS"),
-							Headers: map[string]string{
-								"User-Agent": "FTW Schema Tests",
-								"Host":       "localhost",
-							},
+					Input: Input{
+						DestAddr: strPtr("127.0.0.1"),
+						Port:     intPtr(80),
+						Method:   strPtr("OPTIONS"),
+						Headers: map[string]string{
+							"User-Agent": "FTW Schema Tests",
+							"Host":       "localhost",
 						},
-						Output: Output{
-							Status: 200,
-						},
+					},
+					Output: Output{
+						Status: 200,
 					},
 				},
 			},
@@ -115,22 +116,24 @@ func TestUnmarshalFTWTest(t *testing.T) {
 	for i, test := range ftw.Tests {
 		expectedTest := ftwTest.Tests[i]
 		assert.Equal(expectedTest.TestTitle, test.TestTitle)
+		assert.Equal(expectedTest.RuleId, test.RuleId)
+		assert.Equal(expectedTest.TestId, test.TestId)
 		assert.Len(test.Stages, len(expectedTest.Stages))
 
 		for j, stage := range test.Stages {
 			expectedStage := expectedTest.Stages[j]
-			assert.Equal(expectedStage.SD.Input.DestAddr, stage.SD.Input.DestAddr)
-			assert.Equal(expectedStage.SD.Input.Port, stage.SD.Input.Port)
-			assert.Equal(expectedStage.SD.Input.Method, stage.SD.Input.Method)
-			assert.Len(stage.SD.Input.Headers, len(expectedStage.SD.Input.Headers))
+			assert.Equal(expectedStage.Input.DestAddr, stage.Input.DestAddr)
+			assert.Equal(expectedStage.Input.Port, stage.Input.Port)
+			assert.Equal(expectedStage.Input.Method, stage.Input.Method)
+			assert.Len(stage.Input.Headers, len(expectedStage.Input.Headers))
 
-			for k, header := range stage.SD.Input.Headers {
-				expectedHeader := expectedStage.SD.Input.Headers[k]
+			for k, header := range stage.Input.Headers {
+				expectedHeader := expectedStage.Input.Headers[k]
 				assert.Equal(expectedHeader, header)
 			}
 
-			assert.Equal(expectedStage.SD.Output.NoLogContains, stage.SD.Output.NoLogContains)
-			assert.Equal(expectedStage.SD.Output.Status, stage.SD.Output.Status)
+			assert.Equal(expectedStage.Output.NoLogContains, stage.Output.NoLogContains)
+			assert.Equal(expectedStage.Output.Status, stage.Output.Status)
 		}
 	}
 }
@@ -156,6 +159,8 @@ test_overrides:
       status: 200
       log_contains: "nothing"
       log:
+        expect_id: 123456
+        no_expect_id: 123456
         match_regex: 'id[:\s"]*123456'
         no_match_regex: 'id[:\s"]*123456'
       expect_error: true

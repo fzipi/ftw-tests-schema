@@ -27,8 +27,7 @@ type FTWTest struct {
 	// description: |
 	//   Tests is a list of FTW tests
 	// examples:
-	//   - name: Tests
-	//     value: "\"the tests\""
+	//   - value: exampleTests
 	Tests []Test `yaml:"tests"`
 }
 
@@ -46,6 +45,8 @@ type FTWTestMeta struct {
 	// examples:
 	//   - name: Enabled
 	//     value: false
+	//
+	// Deprecated: ignored; use platform specific overrides instead
 	Enabled *bool `yaml:"enabled,omitempty"`
 
 	// description: |
@@ -73,39 +74,72 @@ type FTWTestMeta struct {
 // Test is an individual test. One test can have multiple stages.
 type Test struct {
 	// description: |
-	//   TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
+	//   TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
 	// examples:
-	//   - name: TestTitle
-	//     value: "\"920100-1\""
-	TestTitle string `yaml:"test_title"`
+	//   - value: exampleTest.TestTitle
+	//
+	// Deprecated: use `rule_id` and `test_id`
+	TestTitle string `yaml:"test_title,omitempty"`
+
+	// description: |
+	//   RuleId is the ID of the rule this test targets
+	// examples:
+	//   - name: RuleId
+	//     value: 123456
+	RuleId int `yaml:"rule_id"`
+
+	// description: |
+	//   TestId is the ID of the test, in relation to `rule_id`
+	// examples:
+	//   - name: TestId
+	//     value: 4
+	TestId int `yaml:"test_id"`
 
 	// description: |
 	//   TestDescription is the description for this particular test. Should be used to describe the internals of
 	//   the specific things this test is targeting.
 	// examples:
-	//   - name: TestDescription
-	//     value: "\"This test targets something\""
+	//   - value: exampleTest.TestDescription
 	TestDescription string `yaml:"desc,omitempty"`
 
 	// description: |
 	//   Stages is the list of all the stages to perform this test.
 	// examples:
-	//   - name: Stages
-	//     value: exampleStages
+	//   - value: exampleStages
 	Stages []Stage `yaml:"stages"`
 }
 
 // Stage is a list of stages
 type Stage struct {
 	// description: |
-	//   StageData is an individual test stage
+	//   StageData is an individual test stage.
+	//
+	// Deprecated: use the other fields of `Stage`
+	SD StageData `yaml:"stage,omitempty"`
+	// description: |
+	//   Describes the purpose of this stage.
 	// examples:
-	//   - name: StageData
-	//     value: exampleStageData
-	SD StageData `yaml:"stage"`
+	//   - value: exampleStage.Description
+	Description string `yaml:"description,omitempty"`
+
+	// description: |
+	//   Input is the data that is passed to the test
+	// examples:
+	//   - name: Input
+	//     value: exampleInput
+	Input Input `yaml:"input"`
+
+	// description: |
+	//   Output is the data that is returned from the test
+	// examples:
+	//   - name: Output
+	//     value: exampleOutput
+	Output Output `yaml:"output"`
 }
 
 // StageData is the data that is passed to the test, and the data that is returned from the test
+//
+// Deprecated: use the other fields of `stage`
 type StageData struct {
 	// description: |
 	//   Input is the data that is passed to the test
@@ -193,6 +227,8 @@ type Input struct {
 	// examples:
 	//   - name: StopMagic
 	//     value: false
+	//
+	// Deprecated: use AutocompleteHeaders instead
 	StopMagic *bool `yaml:"stop_magic" koanf:"stop_magic,omitempty"`
 
 	// description: |
@@ -216,6 +252,8 @@ type Input struct {
 	// examples:
 	//   - name: RAWRequest
 	//     value: "\"TXkgRGF0YQo=\""
+	//
+	// Deprecated: use `encoded_request`
 	RAWRequest string `yaml:"raw_request,omitempty" koanf:"raw_request,omitempty"`
 }
 
@@ -241,7 +279,7 @@ type Output struct {
 	//   - name: LogContains
 	//     value: "\"id 920100\""
 	//
-	// deprecated: use Log instead
+	// Deprecated: use Log instead
 	LogContains string `yaml:"log_contains,omitempty"`
 
 	// description: |
@@ -250,7 +288,7 @@ type Output struct {
 	//   - name: NoLogContains
 	//     value: "\"id 920100\""
 	//
-	// deprecated: use Log instead
+	// Deprecated: use Log instead
 	NoLogContains string `yaml:"no_log_contains,omitempty"`
 
 	// description: |
@@ -272,14 +310,14 @@ type Log struct {
 	// description: |
 	//   Expect the given ID to be contained in the log output.
 	// examples:
-	//   - exampleLog.ExpectId
+	//   - value: exampleLog.ExpectId
 	ExpectId int `yaml:"expect_id,omitempty"`
 
 	// description: |
 	//   Expect the given ID _not_ to be contained in the log output.
 	// examples:
-	//   - exampleLog.NoExpectId
-	NoExpectId int `yaml:"expect_id,omitempty"`
+	//   - value: exampleLog.NoExpectId
+	NoExpectId int `yaml:"no_expect_id,omitempty"`
 
 	// description: |
 	//   Expect the regular expression to match log content for the current test.
@@ -297,76 +335,84 @@ type Log struct {
 // FTWOverrides describes platform specific overrides for tests
 type FTWOverrides struct {
 	// description: |
-	//    The version field designates the version of the schema that validates this file
+	//   The version field designates the version of the schema that validates this file
 	// examples:
-	//     - value: "\"v0.1.0\""
+	//   - value: "\"v0.1.0\""
 	Version string `yaml:"version"`
 
 	// description: |
-	//    Meta describes the metadata information
+	//   Meta describes the metadata information
 	// examples:
-	//     - value: metaExample
+	//   - value: metaExample
 	Meta FTWOverridesMeta `yaml:"meta"`
 
 	// description: |
-	//    List of test override specifications
+	//   List of test override specifications
 	// examples:
-	//     - value: testOverridesExample
+	//   - value: testOverridesExample
 	TestOverrides []TestOverride `yaml:"test_overrides"`
 }
 
 // FTWOverridesMeta describes the metadata information of this yaml file
 type FTWOverridesMeta struct {
 	// description: |
-	//    The name of the WAF engine the tests are expected to run against
+	//   The name of the WAF engine the tests are expected to run against
 	// examples:
-	//    - value: "\"coraza\""
+	//   - value: "\"coraza\""
 	Engine string `yaml:"engine"`
 
 	// description: |
-	//    The name of the platform (e.g., web server) the tests are expected to run against
+	//   The name of the platform (e.g., web server) the tests are expected to run against
 	// examples:
-	//    - value: "\"nginx\""
+	//   - value: "\"nginx\""
 	Platform string `yaml:"platform"`
 
 	// description: |
-	//     Custom annotations; can be used to add additional meta information
+	//   Custom annotations; can be used to add additional meta information
 	// examples:
-	//     - value: annotationsExample
+	//   - value: annotationsExample
 	Annotations map[string]string `yaml:"annotations"`
 }
 
 // TestOverride describes overrides for a single test
 type TestOverride struct {
 	// description: |
-	//     ID of the rule this test targets.
+	//   ID of the rule this test targets.
 	// examples:
-	//     - value: 920100
+	//   - value: testOverridesExample[0].RuleId
 	RuleId int `yaml:"rule_id"`
 
 	// description: |
-	//     IDs of the tests for rule_id that overrides should be applied to.
-	//     If this field is not set, the overrides will be applied to all tests of rule_id.
+	//   IDs of the tests for rule_id that overrides should be applied to.
+	//   If this field is not set, the overrides will be applied to all tests of rule_id.
 	// examples:
-	//     - value: [5, 6]
-	TestIds []int `yaml:"test_ids,omitempty"`
+	//   - value: testOverridesExample[0].TestIds
+	TestIds []int `yaml:"test_ids,flow,omitempty"`
 
 	// description: |
-	//    Describes why this override is necessary.
+	//   Describes why this override is necessary.
 	// examples:
-	//     - value: reasonExample
+	//   - value: reasonExample
 	Reason string `yaml:"reason"`
 
 	// description: |
-	//     Whether this test is expected to fail for this particular configuration.
-	//     Default: false
+	//   Whether this test is expected to fail for this particular configuration.
+	//   Default: false
 	// examples:
-	//     - value: true
+	//   - value: true
 	ExpectFailure *bool `yaml:"expect_failure,omitempty"`
 
 	// description: |
-	//     Specifies overrides on the test output
+	//   Whether a stage should be retried once in case of failure.
+	//   This option is primarily a workaround for a race condition in phase 5,
+	//   where the log entry of a rule may be flushed after the test end marker.
 	// examples:
-	//     - value: 400
+	//   - value: true
+	RetryOnce *bool `yaml:"retry_once,omitempty"`
+
+	// description: |
+	//   Specifies overrides on the test output
+	// examples:
+	//   - value: 400
 	Output Output `yaml:"output"`
 }
