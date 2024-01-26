@@ -4,34 +4,34 @@
 package types
 
 var (
-	exampleTests = []Test{
-		exampleTest,
+	ExampleTests = []Test{
+		ExampleTest,
 	}
-	exampleTest = Test{
+	ExampleTest = Test{
 		TestTitle:       "123456-1",
 		TestDescription: "Unix RCE using `time`",
-		Stages:          exampleStages,
+		Stages:          ExampleStages,
 	}
-	exampleStage = Stage{
+	ExampleStage = Stage{
 		Description: "Get cookie from server",
-		Input:       exampleInput,
-		Output:      exampleOutput,
+		Input:       ExampleInput,
+		Output:      ExampleOutput,
 	}
-	exampleStages = []Stage{
-		exampleStage,
+	ExampleStages = []Stage{
+		ExampleStage,
 	}
-	exampleHeaders = map[string]string{
+	ExampleHeaders = map[string]string{
 		"User-Agent": "CRS Tests",
 		"Host":       "localhost",
 		"Accept":     "*/*",
 	}
-	exampleInput = Input{
+	ExampleInput = Input{
 		DestAddr:            strPtr("192.168.0.1"),
 		Port:                intPtr(8080),
 		Protocol:            strPtr("http"),
 		URI:                 strPtr("/test"),
 		Version:             strPtr("HTTP/1.1"),
-		Headers:             exampleHeaders,
+		Headers:             ExampleHeaders,
 		Method:              strPtr("REPORT"),
 		Data:                nil,
 		EncodedRequest:      "TXkgRGF0YQo=",
@@ -39,38 +39,24 @@ var (
 		StopMagic:           boolPtr(true),
 		AutocompleteHeaders: boolPtr(false),
 	}
-	exampleOutput = Output{
+	ExampleOutput = Output{
 		Status:           200,
 		ResponseContains: "",
 		LogContains:      "nothing",
 		NoLogContains:    "",
-		Log:              exampleLog,
+		Log:              ExampleLog,
 		ExpectError:      boolPtr(true),
 	}
-	exampleLog = Log{
+	ExampleLog = Log{
 		ExpectId:     123456,
 		NoExpectId:   123456,
 		MatchRegex:   `id[:\s"]*123456`,
 		NoMatchRegex: `id[:\s"]*123456`,
 	}
-	metaExample = FTWOverridesMeta{
-		Engine:      "libmodsecurity3",
-		Platform:    "nginx",
-		Annotations: annotationsExample,
-	}
-	annotationsExample = map[string]string{
+	AnnotationsExample = map[string]string{
 		"os":      "Debian Bullseye",
 		"purpose": "L7ASR test suite",
 	}
-	reasonExample = "nginx returns 400 when `Content-Length` header is sent in a\n" +
+	ReasonExample = "nginx returns 400 when `Content-Length` header is sent in a\n" +
 		"`Transfer-Encoding: chunked` request."
-	testOverridesExample = []TestOverride{
-		{
-			RuleId:        920100,
-			TestIds:       []int{4, 6},
-			Reason:        reasonExample,
-			ExpectFailure: func() *bool { b := true; return &b }(),
-			Output:        exampleOutput,
-		},
-	}
 )

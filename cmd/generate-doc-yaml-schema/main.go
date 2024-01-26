@@ -6,11 +6,12 @@ package main
 import (
 	"os"
 
-	"github.com/coreruleset/ftw-tests-schema/types"
+	overrides "github.com/coreruleset/ftw-tests-schema/types/overrides"
+	test "github.com/coreruleset/ftw-tests-schema/types/test"
 )
 
 func main() {
-	data, err := types.GetFTWTestDoc().Encode()
+	data, err := test.GetFTWTestDoc().Encode()
 	if err != nil {
 		panic(err)
 	}
@@ -19,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	data, err = types.GetFTWOverridesDoc().Encode()
+	data, err = overrides.GetFTWOverridesDoc().Encode()
 	if err != nil {
 		panic(err)
 	}
