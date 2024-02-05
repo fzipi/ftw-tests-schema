@@ -15,4 +15,4 @@
 # vendor/
 
 # Generated files
-types/types_doc.go
+**/*_doc.go

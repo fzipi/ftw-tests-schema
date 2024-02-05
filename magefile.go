@@ -1,4 +1,4 @@
-// Copyright 2023 Felipe Zipitria
+// Copyright 2023 CRS
 // SPDX-License-Identifier: Apache-2.0
 
 //go:build mage
@@ -16,18 +16,24 @@ import (
 )
 
 var addLicenseVersion = "v1.1.1" // https://github.com/google/addlicense
-var golangCILintVer = "v1.55.1"  // https://github.com/golangci/golangci-lint/releases
+var golangCILintVer = "v1.55.2"  // https://github.com/golangci/golangci-lint/releases
 var gosImportsVer = "v0.3.8"     // https://github.com/rinchsan/gosimports/releases/tag/v0.3.8
 
 var errRunGoModTidy = errors.New("go.mod/sum not formatted, commit changes")
 var errNoGitDir = errors.New("no .git directory found")
 var errUpdateGeneratedFiles = errors.New("generated files need to be updated")
 
-// Format formats code in this repository.
-func Format() error {
+// Generate Go documernation files for YAML structures
+func Generate() error {
 	if err := sh.RunV("go", "generate", "./..."); err != nil {
 		return err
 	}
+	return nil
+}
+
+// Format formats code in this repository.
+func Format() error {
+	mg.SerialDeps(Generate)
 
 	if err := sh.RunV("go", "mod", "tidy"); err != nil {
 		return err
@@ -36,7 +42,7 @@ func Format() error {
 	// addlicense strangely logs skipped files to stderr despite not being erroneous, so use the long sh.Exec form to
 	// discard stderr too.
 	if _, err := sh.Exec(map[string]string{}, io.Discard, io.Discard, "go", "run", fmt.Sprintf("github.com/google/addlicense@%s", addLicenseVersion),
-		"-c", "Felipe Zipitria",
+		"-c", "OWASP CRS",
 		"-s=only",
 		"-ignore", "**/*.yml",
 		"-ignore", "**/*.yaml",
@@ -52,9 +58,7 @@ func Format() error {
 
 // Lint verifies code quality.
 func Lint() error {
-	if err := sh.RunV("go", "generate", "./..."); err != nil {
-		return err
-	}
+	mg.SerialDeps(Generate)
 
 	if sh.Run("git", "diff", "--exit-code", "--", "'*_doc.go'") != nil {
 		return errUpdateGeneratedFiles
@@ -77,6 +81,8 @@ func Lint() error {
 
 // Test runs all tests.
 func Test() error {
+	mg.SerialDeps(Generate)
+
 	if err := sh.RunV("go", "test", "./..."); err != nil {
 		return err
 	}
@@ -84,7 +90,10 @@ func Test() error {
 	return nil
 }
 
+// Generate Markdown output (printed to terminal)
 func Markdown() error {
+	mg.SerialDeps(Generate)
+
 	if err := sh.RunV("go", "build", "./cmd/generate-doc-yaml-schema"); err != nil {
 		return err
 	}

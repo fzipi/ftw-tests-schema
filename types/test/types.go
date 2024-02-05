@@ -1,59 +1,9 @@
-package types
-
-// Copyright 2023 Felipe Zipitria
+// Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate dstdocgen -package types -path . -structure FTWTest -output ./types_doc.go
+//go:generate dstdocgen -package types -path . -structure FTWTest -output ./test_doc.go
 
-func intPtr(i int) *int {
-	return &i
-}
-
-func boolPtr(b bool) *bool {
-	return &b
-}
-
-func strPtr(s string) *string {
-	return &s
-}
-
-var (
-	exampleStageData = StageData{
-		Input:  exampleInput,
-		Output: exampleOutput,
-	}
-	exampleStages = []Stage{
-		{
-			exampleStageData,
-		},
-	}
-	exampleHeaders = map[string]string{
-		"User-Agent": "CRS Tests",
-		"Host":       "localhost",
-		"Accept":     "*/*",
-	}
-	exampleInput = Input{
-		DestAddr:            strPtr("192.168.0.1"),
-		Port:                intPtr(8080),
-		Protocol:            strPtr("http"),
-		URI:                 strPtr("/test"),
-		Version:             strPtr("HTTP/1.1"),
-		Headers:             exampleHeaders,
-		Method:              strPtr("REPORT"),
-		Data:                nil,
-		EncodedRequest:      "TXkgRGF0YQo=",
-		SaveCookie:          boolPtr(false),
-		StopMagic:           boolPtr(true),
-		AutocompleteHeaders: boolPtr(false),
-	}
-	exampleOutput = Output{
-		Status:           []int{200},
-		ResponseContains: "",
-		LogContains:      "nothing",
-		NoLogContains:    "",
-		ExpectError:      boolPtr(true),
-	}
-)
+package types
 
 // Welcome to the FTW YAMLFormat documentation.
 // In this document we will explain all the possible options that can be used within the YAML format.
@@ -64,7 +14,7 @@ var (
 type FTWTest struct {
 	// description: |
 	//   Meta describes the metadata information of this yaml test file
-	Meta Meta `yaml:"meta"`
+	Meta FTWTestMeta `yaml:"meta"`
 
 	// description: |
 	//   FileName is the name of the file where these tests are.
@@ -76,13 +26,12 @@ type FTWTest struct {
 	// description: |
 	//   Tests is a list of FTW tests
 	// examples:
-	//   - name: Tests
-	//     value: "\"the tests\""
+	//   - value: ExampleTests
 	Tests []Test `yaml:"tests"`
 }
 
-// Meta describes the metadata information of this yaml test file
-type Meta struct {
+// FTWTestMeta describes the metadata information of this yaml test file
+type FTWTestMeta struct {
 	// description: |
 	//   Author is the list of authors that added content to this file
 	// examples:
@@ -95,6 +44,8 @@ type Meta struct {
 	// examples:
 	//   - name: Enabled
 	//     value: false
+	//
+	// Deprecated: ignored; use platform specific overrides instead
 	Enabled *bool `yaml:"enabled,omitempty"`
 
 	// description: |
@@ -122,52 +73,85 @@ type Meta struct {
 // Test is an individual test. One test can have multiple stages.
 type Test struct {
 	// description: |
-	//   TestTitle the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
+	//   TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
 	// examples:
-	//   - name: TestTitle
-	//     value: "\"920100-1\""
-	TestTitle string `yaml:"test_title"`
+	//   - value: ExampleTest.TestTitle
+	//
+	// Deprecated: use `rule_id` and `test_id`
+	TestTitle string `yaml:"test_title,omitempty"`
+
+	// description: |
+	//   RuleId is the ID of the rule this test targets
+	// examples:
+	//   - name: RuleId
+	//     value: 123456
+	RuleId int `yaml:"rule_id"`
+
+	// description: |
+	//   TestId is the ID of the test, in relation to `rule_id`
+	// examples:
+	//   - name: TestId
+	//     value: 4
+	TestId int `yaml:"test_id"`
 
 	// description: |
 	//   TestDescription is the description for this particular test. Should be used to describe the internals of
 	//   the specific things this test is targeting.
 	// examples:
-	//   - name: TestDescription
-	//     value: "\"This test targets something\""
+	//   - value: ExampleTest.TestDescription
 	TestDescription string `yaml:"desc,omitempty"`
 
 	// description: |
 	//   Stages is the list of all the stages to perform this test.
 	// examples:
-	//   - name: Stages
-	//     value: exampleStages
+	//   - value: ExampleStages
 	Stages []Stage `yaml:"stages"`
 }
 
 // Stage is a list of stages
 type Stage struct {
 	// description: |
-	//   StageData is an individual test stage
+	//   StageData is an individual test stage.
+	//
+	// Deprecated: use the other fields of `Stage`
+	SD StageData `yaml:"stage,omitempty"`
+	// description: |
+	//   Describes the purpose of this stage.
 	// examples:
-	//   - name: StageData
-	//     value: exampleStageData
-	SD StageData `yaml:"stage"`
-}
+	//   - value: ExampleStage.Description
+	Description string `yaml:"description,omitempty"`
 
-// StageData is the data that is passed to the test, and the data that is returned from the test
-type StageData struct {
 	// description: |
 	//   Input is the data that is passed to the test
 	// examples:
 	//   - name: Input
-	//     value: exampleInput
+	//     value: ExampleInput
 	Input Input `yaml:"input"`
 
 	// description: |
 	//   Output is the data that is returned from the test
 	// examples:
 	//   - name: Output
-	//     value: exampleOutput
+	//     value: ExampleOutput
+	Output Output `yaml:"output"`
+}
+
+// StageData is the data that is passed to the test, and the data that is returned from the test
+//
+// Deprecated: use the other fields of `stage`
+type StageData struct {
+	// description: |
+	//   Input is the data that is passed to the test
+	// examples:
+	//   - name: Input
+	//     value: ExampleInput
+	Input Input `yaml:"input"`
+
+	// description: |
+	//   Output is the data that is returned from the test
+	// examples:
+	//   - name: Output
+	//     value: ExampleOutput
 	Output Output `yaml:"output"`
 }
 
@@ -220,7 +204,7 @@ type Input struct {
 	//   Method allows you to declare headers that the test should send.
 	// examples:
 	//   - name: Headers
-	//     value: exampleHeaders
+	//     value: ExampleHeaders
 	Headers map[string]string `yaml:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
@@ -242,6 +226,8 @@ type Input struct {
 	// examples:
 	//   - name: StopMagic
 	//     value: false
+	//
+	// Deprecated: use AutocompleteHeaders instead
 	StopMagic *bool `yaml:"stop_magic" koanf:"stop_magic,omitempty"`
 
 	// description: |
@@ -265,17 +251,19 @@ type Input struct {
 	// examples:
 	//   - name: RAWRequest
 	//     value: "\"TXkgRGF0YQo=\""
+	//
+	// Deprecated: use `encoded_request`
 	RAWRequest string `yaml:"raw_request,omitempty" koanf:"raw_request,omitempty"`
 }
 
 // Output is the response expected from the test
 type Output struct {
 	// description: |
-	//   Status describes the HTTP status error code expected as response.
+	//   Status describes the HTTP status code expected in the response.
 	// examples:
 	//   - name: Status
-	//     value: [200]
-	Status []int `yaml:"status,flow,omitempty"`
+	//     value: 200
+	Status int `yaml:"status,omitempty"`
 
 	// description: |
 	//   ResponseContains describes the text that should be contained in the HTTP response.
@@ -289,6 +277,8 @@ type Output struct {
 	// examples:
 	//   - name: LogContains
 	//     value: "\"id 920100\""
+	//
+	// Deprecated: use Log instead
 	LogContains string `yaml:"log_contains,omitempty"`
 
 	// description: |
@@ -296,7 +286,15 @@ type Output struct {
 	// examples:
 	//   - name: NoLogContains
 	//     value: "\"id 920100\""
+	//
+	// Deprecated: use Log instead
 	NoLogContains string `yaml:"no_log_contains,omitempty"`
+
+	// description: |
+	//   Log is used to configure expectations about the log contents.
+	// examples:
+	//   - value: ExampleLog
+	Log Log `yaml:"log,omitempty"`
 
 	// description: |
 	//   When `ExpectError` is true, we don't expect an answer from the WAF, just an error.
@@ -304,4 +302,31 @@ type Output struct {
 	//   - name: ExpectError
 	//     value: false
 	ExpectError *bool `yaml:"expect_error,omitempty"`
+}
+
+// Log is used to configure expectations about the log contents.
+type Log struct {
+	// description: |
+	//   Expect the given ID to be contained in the log output.
+	// examples:
+	//   - value: ExampleLog.ExpectId
+	ExpectId int `yaml:"expect_id,omitempty"`
+
+	// description: |
+	//   Expect the given ID _not_ to be contained in the log output.
+	// examples:
+	//   - value: ExampleLog.NoExpectId
+	NoExpectId int `yaml:"no_expect_id,omitempty"`
+
+	// description: |
+	//   Expect the regular expression to match log content for the current test.
+	// examples:
+	//   - value: ExampleLog.MatchRegex
+	MatchRegex string `yaml:"match_regex,omitempty"`
+
+	// description: |
+	//   Expect the regular expression to _not_ match log content for the current test.
+	// examples:
+	//   - value: ExampleLog.NoMatchRegex
+	NoMatchRegex string `yaml:"no_match_regex,omitempty"`
 }
