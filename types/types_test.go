@@ -8,6 +8,8 @@ import (
 
 	"github.com/goccy/go-yaml"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/coreruleset/ftw-tests-schema/internal/helpers"
 )
 
 var testYaml = `---
@@ -59,7 +61,7 @@ var ftwTest = &FTWTest{
 	FileName: "testYaml.yaml",
 	Meta: FTWTestMeta{
 		Author:      "ftw-tests-schema",
-		Enabled:     boolPtr(true),
+		Enabled:     helpers.BoolPtr(true),
 		Name:        "testYaml",
 		Description: "Simple YAML to test that the schema is working.",
 	},
@@ -82,9 +84,9 @@ var ftwTest = &FTWTest{
 			Stages: []Stage{
 				{
 					Input: Input{
-						DestAddr: strPtr("127.0.0.1"),
-						Port:     intPtr(80),
-						Method:   strPtr("OPTIONS"),
+						DestAddr: helpers.StrPtr("127.0.0.1"),
+						Port:     helpers.IntPtr(80),
+						Method:   helpers.StrPtr("OPTIONS"),
 						Headers: map[string]string{
 							"User-Agent": "FTW Schema Tests",
 							"Host":       "localhost",
@@ -101,39 +103,39 @@ var ftwTest = &FTWTest{
 
 func TestUnmarshalFTWTest(t *testing.T) {
 	var ftw FTWTest
-	assert := assert.New(t)
+	assertions := assert.New(t)
 
 	err := yaml.Unmarshal([]byte(testYaml), &ftw)
-	assert.NoError(err)
+	assertions.NoError(err)
 
-	assert.Equal(ftwTest.FileName, ftw.FileName)
-	assert.Equal(ftwTest.Meta.Author, ftw.Meta.Author)
-	assert.Equal(ftwTest.Meta.Enabled, ftw.Meta.Enabled)
-	assert.Equal(ftwTest.Meta.Name, ftw.Meta.Name)
-	assert.Equal(ftwTest.Meta.Description, ftw.Meta.Description)
-	assert.Len(ftwTest.Tests, len(ftw.Tests))
+	assertions.Equal(ftwTest.FileName, ftw.FileName)
+	assertions.Equal(ftwTest.Meta.Author, ftw.Meta.Author)
+	assertions.Equal(ftwTest.Meta.Enabled, ftw.Meta.Enabled)
+	assertions.Equal(ftwTest.Meta.Name, ftw.Meta.Name)
+	assertions.Equal(ftwTest.Meta.Description, ftw.Meta.Description)
+	assertions.Len(ftwTest.Tests, len(ftw.Tests))
 
 	for i, test := range ftw.Tests {
 		expectedTest := ftwTest.Tests[i]
-		assert.Equal(expectedTest.TestTitle, test.TestTitle)
-		assert.Equal(expectedTest.RuleId, test.RuleId)
-		assert.Equal(expectedTest.TestId, test.TestId)
-		assert.Len(test.Stages, len(expectedTest.Stages))
+		assertions.Equal(expectedTest.TestTitle, test.TestTitle)
+		assertions.Equal(expectedTest.RuleId, test.RuleId)
+		assertions.Equal(expectedTest.TestId, test.TestId)
+		assertions.Len(test.Stages, len(expectedTest.Stages))
 
 		for j, stage := range test.Stages {
 			expectedStage := expectedTest.Stages[j]
-			assert.Equal(expectedStage.Input.DestAddr, stage.Input.DestAddr)
-			assert.Equal(expectedStage.Input.Port, stage.Input.Port)
-			assert.Equal(expectedStage.Input.Method, stage.Input.Method)
-			assert.Len(stage.Input.Headers, len(expectedStage.Input.Headers))
+			assertions.Equal(expectedStage.Input.DestAddr, stage.Input.DestAddr)
+			assertions.Equal(expectedStage.Input.Port, stage.Input.Port)
+			assertions.Equal(expectedStage.Input.Method, stage.Input.Method)
+			assertions.Len(stage.Input.Headers, len(expectedStage.Input.Headers))
 
 			for k, header := range stage.Input.Headers {
 				expectedHeader := expectedStage.Input.Headers[k]
-				assert.Equal(expectedHeader, header)
+				assertions.Equal(expectedHeader, header)
 			}
 
-			assert.Equal(expectedStage.Output.NoLogContains, stage.Output.NoLogContains)
-			assert.Equal(expectedStage.Output.Status, stage.Output.Status)
+			assertions.Equal(expectedStage.Output.NoLogContains, stage.Output.NoLogContains)
+			assertions.Equal(expectedStage.Output.Status, stage.Output.Status)
 		}
 	}
 }

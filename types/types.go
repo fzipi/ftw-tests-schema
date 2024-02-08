@@ -70,10 +70,10 @@ type FTWTestMeta struct {
 	Version string `yaml:"version,omitempty"`
 }
 
-// Test is an individual test. One test can have multiple stages.
+// Test is an individual types. One test can have multiple stages.
 type Test struct {
 	// description: |
-	//   TestTitle is the title of this particular test. It is used for inclusion/exclusion of each run by the tool.
+	//   TestTitle is the title of this particular types. It is used for inclusion/exclusion of each run by the tool.
 	// examples:
 	//   - value: ExampleTest.TestTitle
 	//
@@ -95,14 +95,14 @@ type Test struct {
 	TestId int `yaml:"test_id"`
 
 	// description: |
-	//   TestDescription is the description for this particular test. Should be used to describe the internals of
+	//   TestDescription is the description for this particular types. Should be used to describe the internals of
 	//   the specific things this test is targeting.
 	// examples:
 	//   - value: ExampleTest.TestDescription
 	TestDescription string `yaml:"desc,omitempty"`
 
 	// description: |
-	//   Stages is the list of all the stages to perform this test.
+	//   Stages is the list of all the stages to perform this types.
 	// examples:
 	//   - value: ExampleStages
 	Stages []Stage `yaml:"stages"`
@@ -319,13 +319,13 @@ type Log struct {
 	NoExpectId int `yaml:"no_expect_id,omitempty"`
 
 	// description: |
-	//   Expect the regular expression to match log content for the current test.
+	//   Expect the regular expression to match log content for the current types.
 	// examples:
 	//   - value: ExampleLog.MatchRegex
 	MatchRegex string `yaml:"match_regex,omitempty"`
 
 	// description: |
-	//   Expect the regular expression to _not_ match log content for the current test.
+	//   Expect the regular expression to _not_ match log content for the current types.
 	// examples:
 	//   - value: ExampleLog.NoMatchRegex
 	NoMatchRegex string `yaml:"no_match_regex,omitempty"`

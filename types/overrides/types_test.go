@@ -1,7 +1,7 @@
 // Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-package types
+package overrides
 
 import (
 	"testing"
