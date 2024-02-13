@@ -1,28 +1,28 @@
 // Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-package types
+package overrides
 
-import test "github.com/coreruleset/ftw-tests-schema/types/test"
+import "github.com/coreruleset/ftw-tests-schema/types"
 
 var (
 	// imported
-	AnnotationsExample = test.AnnotationsExample
-	ReasonExample      = test.ReasonExample
-	ExampleLog         = test.ExampleLog
+	AnnotationsExample = types.AnnotationsExample
+	ReasonExample      = types.ReasonExample
+	ExampleLog         = types.ExampleLog
 
 	MetaExample = FTWOverridesMeta{
 		Engine:      "libmodsecurity3",
 		Platform:    "nginx",
-		Annotations: test.AnnotationsExample,
+		Annotations: types.AnnotationsExample,
 	}
 	TestOverridesExample = []TestOverride{
 		{
 			RuleId:        920100,
 			TestIds:       []int{4, 6},
-			Reason:        test.ReasonExample,
+			Reason:        types.ReasonExample,
 			ExpectFailure: func() *bool { b := true; return &b }(),
-			Output:        test.ExampleOutput,
+			Output:        types.ExampleOutput,
 		},
 	}
 )

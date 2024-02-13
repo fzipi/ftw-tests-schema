@@ -1,16 +1,16 @@
 // Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-package types
+package helpers
 
-func intPtr(i int) *int {
+func IntPtr(i int) *int {
 	return &i
 }
 
-func boolPtr(b bool) *bool {
+func BoolPtr(b bool) *bool {
 	return &b
 }
 
-func strPtr(s string) *string {
+func StrPtr(s string) *string {
 	return &s
 }

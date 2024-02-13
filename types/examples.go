@@ -3,6 +3,8 @@
 
 package types
 
+import "github.com/coreruleset/ftw-tests-schema/internal/helpers"
+
 var (
 	ExampleTests = []Test{
 		ExampleTest,
@@ -26,18 +28,18 @@ var (
 		"Accept":     "*/*",
 	}
 	ExampleInput = Input{
-		DestAddr:            strPtr("192.168.0.1"),
-		Port:                intPtr(8080),
-		Protocol:            strPtr("http"),
-		URI:                 strPtr("/test"),
-		Version:             strPtr("HTTP/1.1"),
+		DestAddr:            helpers.StrPtr("192.168.0.1"),
+		Port:                helpers.IntPtr(8080),
+		Protocol:            helpers.StrPtr("http"),
+		URI:                 helpers.StrPtr("/test"),
+		Version:             helpers.StrPtr("HTTP/1.1"),
 		Headers:             ExampleHeaders,
-		Method:              strPtr("REPORT"),
+		Method:              helpers.StrPtr("REPORT"),
 		Data:                nil,
 		EncodedRequest:      "TXkgRGF0YQo=",
-		SaveCookie:          boolPtr(false),
-		StopMagic:           boolPtr(true),
-		AutocompleteHeaders: boolPtr(false),
+		SaveCookie:          helpers.BoolPtr(false),
+		StopMagic:           helpers.BoolPtr(true),
+		AutocompleteHeaders: helpers.BoolPtr(false),
 	}
 	ExampleOutput = Output{
 		Status:           200,
@@ -45,7 +47,7 @@ var (
 		LogContains:      "nothing",
 		NoLogContains:    "",
 		Log:              ExampleLog,
-		ExpectError:      boolPtr(true),
+		ExpectError:      helpers.BoolPtr(true),
 	}
 	ExampleLog = Log{
 		ExpectId:     123456,

@@ -1,11 +1,11 @@
 // Copyright 2023 OWASP CRS
 // SPDX-License-Identifier: Apache-2.0
 
-//go:generate dstdocgen -package types -path . -structure FTWOverrides -output ./overrides_doc.go
+//go:generate dstdocgen -package overrides -path . -structure FTWOverrides -output ./overrides_doc.go
 
-package types
+package overrides
 
-import test "github.com/coreruleset/ftw-tests-schema/types/test"
+import "github.com/coreruleset/ftw-tests-schema/types"
 
 // FTWOverrides describes platform specific overrides for tests
 type FTWOverrides struct {
@@ -89,5 +89,5 @@ type TestOverride struct {
 	//   Specifies overrides on the test output
 	// examples:
 	//   - value: 400
-	Output test.Output `yaml:"output"`
+	Output types.Output `yaml:"output"`
 }

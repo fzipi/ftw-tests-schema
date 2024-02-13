@@ -16,3 +16,6 @@
 
 # Generated files
 **/*_doc.go
+
+# Markdown generator binary
+generate-doc-yaml-schema

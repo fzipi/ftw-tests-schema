@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -93,11 +94,15 @@ func Test() error {
 // Generate Markdown output (printed to terminal)
 func Markdown() error {
 	mg.SerialDeps(Generate)
+	generatorBinary := "generate-doc-yaml-schema"
 
-	if err := sh.RunV("go", "build", "./cmd/generate-doc-yaml-schema"); err != nil {
+	if err := sh.RunV("go", "build", "./cmd/"+generatorBinary); err != nil {
 		return err
 	}
-	markdown, err := sh.Output("./generate-doc-yaml-schema")
+
+	defer os.Remove(generatorBinary)
+
+	markdown, err := sh.Output("./" + generatorBinary)
 	if err != nil {
 		return err
 	}
