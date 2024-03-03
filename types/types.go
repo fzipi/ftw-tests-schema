@@ -302,6 +302,12 @@ type Output struct {
 	//   - name: ExpectError
 	//     value: false
 	ExpectError *bool `yaml:"expect_error,omitempty"`
+
+	// description: |
+	//   When `RetryOnce` is true, the test run will be retried once upon failures. This options
+	//   primary purpose is to work around a race condition in phase 5, where the log entry for
+	//   a phase 5 rule may appear after the end marker of the previous test.
+	RetryOnce *bool `yaml:"retry_once,omitempty"`
 }
 
 // Log is used to configure expectations about the log contents.
