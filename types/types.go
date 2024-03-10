@@ -156,7 +156,6 @@ type StageData struct {
 }
 
 // Input represents the input request in a stage
-// The fields `Version`, `Method` and `URI` we want to explicitly now when they are set to ""
 type Input struct {
 	// description: |
 	//   DestAddr is the IP of the destination host that the test will send the message to.
@@ -187,6 +186,16 @@ type Input struct {
 	URI *string `yaml:"uri,omitempty" koanf:"uri,omitempty"`
 
 	// description: |
+	//   FollowRedirect will expect the previous stage of the same test to have received a
+	//   redirect response, it will fail the test otherwise. The redirect location will be used
+	//   to send the request for the current stage and any settings for port, protocol, address,
+	//   or URI will be ignored.
+	// examples:
+	//   - name: follow_redirect
+	//     value: true
+	FollowRedirect *bool `yaml:"follow_redirect,omitempty" koanf:"follow_redirect,omitempty"`
+
+	// description: |
 	//   Version allows you to declare the HTTP version the test should use as part of the request line.
 	// examples:
 	//   - name: Version
@@ -213,6 +222,15 @@ type Input struct {
 	//   - name: Data
 	//     value: "\"Bibitti bopi\""
 	Data *string `yaml:"data,omitempty" koanf:"data,omitempty"`
+
+	// description: |
+	//   EncodedData allows you to declare the payload as a base64 encoded string, which
+	//   will be decoded into bytes and sent verbatimt to the server. This allows for complex
+	//   payloads that include invisible characters or invalid Unicode byte sequences.
+	// examples:
+	//   - name: encoded_data
+	//     value: c29tZXRoaW5nIHdpdGgKbmV3bGluZQo=
+	EncodedData *string `yaml:"encoded_data,omitempty" koanf:"encoded_data,omitempty"`
 
 	// description: |
 	//   SaveCookie allows you to automatically provide cookies if there are multiple stages and save cookie is set
@@ -313,16 +331,16 @@ type Output struct {
 // Log is used to configure expectations about the log contents.
 type Log struct {
 	// description: |
-	//   Expect the given ID to be contained in the log output.
+	//   Expect the given IDs to be contained in the log output.
 	// examples:
-	//   - value: ExampleLog.ExpectId
-	ExpectId int `yaml:"expect_id,omitempty"`
+	//   -value: ExampleLog.ExpectIds
+	ExpectIds []int `yaml:"expect_ids,omitempty"`
 
 	// description: |
-	//   Expect the given ID _not_ to be contained in the log output.
+	//   Expect the given IDs _not_ to be contained in the log output.
 	// examples:
-	//   - value: ExampleLog.NoExpectId
-	NoExpectId int `yaml:"no_expect_id,omitempty"`
+	//   - value: ExampleLog.NoExpectIds
+	NoExpectIds []int `yaml:"no_expect_ids,omitempty"`
 
 	// description: |
 	//   Expect the regular expression to match log content for the current types.
