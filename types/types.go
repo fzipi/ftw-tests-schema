@@ -5,6 +5,8 @@
 
 package types
 
+import "fmt"
+
 // Welcome to the FTW YAMLFormat documentation.
 // In this document we will explain all the possible options that can be used within the YAML format.
 // Generally this is the preferred format for writing tests in as they don't require any programming skills
@@ -17,11 +19,11 @@ type FTWTest struct {
 	Meta FTWTestMeta `yaml:"meta"`
 
 	// description: |
-	//   FileName is the name of the file where these tests are.
+	//   RuleId is the ID of the rule this test targets.
 	// examples:
-	//   - name: FileName
-	//     value: "\"test-1234.yaml\""
-	FileName string
+	//   - name: RuleId
+	//     value: 123456
+	RuleId uint `yaml:"rule_id"`
 
 	// description: |
 	//   Tests is a list of FTW tests
@@ -70,7 +72,7 @@ type FTWTestMeta struct {
 	Version string `yaml:"version,omitempty"`
 }
 
-// Test is an individual types. One test can have multiple stages.
+// Test is an individual test case. One test can have multiple stages.
 type Test struct {
 	// description: |
 	//   TestTitle is the title of this particular types. It is used for inclusion/exclusion of each run by the tool.
@@ -78,43 +80,48 @@ type Test struct {
 	//   - value: ExampleTest.TestTitle
 	//
 	// Deprecated: use `rule_id` and `test_id`
-	TestTitle string `yaml:"test_title,omitempty"`
+	TestTitle string
 
 	// description: |
-	//   RuleId is the ID of the rule this test targets
+	//   RuleId is the ID of the rule this test targets.
+	//   This field is for internal use and not exposed via YAML.
 	// examples:
 	//   - name: RuleId
 	//     value: 123456
-	RuleId int `yaml:"rule_id"`
+	RuleId uint
 
 	// description: |
-	//   TestId is the ID of the test, in relation to `rule_id`
+	//   TestId is the ID of the test, in relation to `rule_id`.
+	//   When this field is not set, the ID will be inferred from the
+	//   position.
 	// examples:
 	//   - name: TestId
 	//     value: 4
-	TestId int `yaml:"test_id"`
+	TestId uint `yaml:"test_id"`
 
 	// description: |
-	//   TestDescription is the description for this particular types. Should be used to describe the internals of
-	//   the specific things this test is targeting.
+	//   TestDescription is the description for this particular test.
+	//   Should be used to describe the internals of the specific things this test is targeting.
 	// examples:
 	//   - value: ExampleTest.TestDescription
 	TestDescription string `yaml:"desc,omitempty"`
 
 	// description: |
-	//   Stages is the list of all the stages to perform this types.
+	//   Stages is the list of all the stages to perform this test.
 	// examples:
 	//   - value: ExampleStages
 	Stages []Stage `yaml:"stages"`
 }
 
+// IdString prints the human readable ID of a test in the format
+// <rule ID>-<test ID>. This format is also used when matching
+// the include / exclude regular expressions.
+func (t *Test) IdString() string {
+	return fmt.Sprintf("%d-%d", t.RuleId, t.TestId)
+}
+
 // Stage is a list of stages
 type Stage struct {
-	// description: |
-	//   StageData is an individual test stage.
-	//
-	// Deprecated: use the other fields of `Stage`
-	SD StageData `yaml:"stage,omitempty"`
 	// description: |
 	//   Describes the purpose of this stage.
 	// examples:
@@ -229,7 +236,7 @@ type Input struct {
 	//   payloads that include invisible characters or invalid Unicode byte sequences.
 	// examples:
 	//   - name: encoded_data
-	//     value: c29tZXRoaW5nIHdpdGgKbmV3bGluZQo=
+	//     value: ExampleEncodedData
 	EncodedData *string `yaml:"encoded_data,omitempty" koanf:"encoded_data,omitempty"`
 
 	// description: |

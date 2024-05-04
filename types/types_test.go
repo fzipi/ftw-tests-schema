@@ -13,16 +13,14 @@ import (
 )
 
 var testYaml = `---
-filename: "testYaml.yaml"
 meta:
   author: "ftw-tests-schema"
   enabled: true
   name: "testYaml"
   description: "Simple YAML to test that the schema is working."
+rule_id: 123456
 tests:
-  - test_title: 1234-1
-    rule_id: 1234
-    test_id: 1
+  - test_id: 1
     desc: "Test that the schema is working."
     stages:
       - input:
@@ -43,9 +41,8 @@ tests:
           status: 200
           response_contains: ""
           log_contains: "nothing"
-          no_log_contains: ""
-  - test_title: 1234-2
-    stages:
+          no_log_contains: "everything"
+  - stages:
       - input:
           dest_addr: "127.0.0.1"
           port: 80
@@ -58,7 +55,7 @@ tests:
 `
 
 var ftwTest = &FTWTest{
-	FileName: "testYaml.yaml",
+	RuleId: 123456,
 	Meta: FTWTestMeta{
 		Author:      "ftw-tests-schema",
 		Enabled:     helpers.BoolPtr(true),
@@ -67,8 +64,6 @@ var ftwTest = &FTWTest{
 	},
 	Tests: []Test{
 		{
-			TestTitle:       "1234-1",
-			RuleId:          1234,
 			TestId:          1,
 			TestDescription: "Test that the schema is working.",
 			Stages: []Stage{
@@ -80,7 +75,6 @@ var ftwTest = &FTWTest{
 			},
 		},
 		{
-			TestTitle: "1234-2",
 			Stages: []Stage{
 				{
 					Input: Input{
@@ -108,7 +102,7 @@ func TestUnmarshalFTWTest(t *testing.T) {
 	err := yaml.Unmarshal([]byte(testYaml), &ftw)
 	assertions.NoError(err)
 
-	assertions.Equal(ftwTest.FileName, ftw.FileName)
+	assertions.Equal(ftwTest.RuleId, ftw.RuleId)
 	assertions.Equal(ftwTest.Meta.Author, ftw.Meta.Author)
 	assertions.Equal(ftwTest.Meta.Enabled, ftw.Meta.Enabled)
 	assertions.Equal(ftwTest.Meta.Name, ftw.Meta.Name)
@@ -118,7 +112,6 @@ func TestUnmarshalFTWTest(t *testing.T) {
 	for i, test := range ftw.Tests {
 		expectedTest := ftwTest.Tests[i]
 		assertions.Equal(expectedTest.TestTitle, test.TestTitle)
-		assertions.Equal(expectedTest.RuleId, test.RuleId)
 		assertions.Equal(expectedTest.TestId, test.TestId)
 		assertions.Len(test.Stages, len(expectedTest.Stages))
 

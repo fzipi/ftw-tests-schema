@@ -24,13 +24,14 @@ test_overrides:
     reason: |-
       nginx returns 400 when ` + "`" + "Content-Length" + "`" + ` header is sent in a
       ` + "`" + `Transfer-Encoding: chunked` + "`" + ` request.
-    expect_failure: true
     output:
       status: 200
+      response_contains: "HTTP/1.1"
       log_contains: "nothing"
+      no_log_contains: "everything"
       log:
-        expect_id: 123456
-        no_expect_id: 123456
+        expect_ids: [123456]
+        no_expect_ids: [123456]
         match_regex: 'id[:\s"]*123456'
         no_match_regex: 'id[:\s"]*123456'
       expect_error: true
@@ -95,7 +96,6 @@ func TestUnmarmarshalTestOverrides(t *testing.T) {
 		asserter.Equal(expectedTestOverride.RuleId, testOverride.RuleId)
 		asserter.ElementsMatch(expectedTestOverride.TestIds, testOverride.TestIds)
 		asserter.Equal(expectedTestOverride.Reason, testOverride.Reason)
-		asserter.Equal(expectedTestOverride.ExpectFailure, testOverride.ExpectFailure)
 		if !assert.ObjectsAreEqual(expectedTestOverride.Output, testOverride.Output) {
 			asserter.Failf("Output:", "%v != %v", testOverride.Output, expectedTestOverride.Output)
 		}

@@ -5,7 +5,9 @@
 
 package overrides
 
-import "github.com/coreruleset/ftw-tests-schema/types"
+import (
+	"github.com/coreruleset/ftw-tests-schema/types"
+)
 
 // FTWOverrides describes platform specific overrides for tests
 type FTWOverrides struct {
@@ -55,27 +57,26 @@ type TestOverride struct {
 	//   ID of the rule this test targets.
 	// examples:
 	//   - value: TestOverridesExample[0].RuleId
-	RuleId int `yaml:"rule_id"`
+	RuleId uint `yaml:"rule_id"`
 
 	// description: |
 	//   IDs of the tests for rule_id that overrides should be applied to.
 	//   If this field is not set, the overrides will be applied to all tests of rule_id.
 	// examples:
 	//   - value: TestOverridesExample[0].TestIds
-	TestIds []int `yaml:"test_ids,flow,omitempty"`
+	TestIds []uint `yaml:"test_ids,flow,omitempty"`
+
+	// description: |
+	//   IDs of the stages to which overrides should be applied.
+	//   Stage IDs listed will be overridden for all test IDs listed in `TestIds`.
+	//   If this field is not set, the overrides will be applied to all stages.
+	StageIds []uint `yaml:"stage_ids,omitempty"`
 
 	// description: |
 	//   Describes why this override is necessary.
 	// examples:
 	//   - value: ReasonExample
 	Reason string `yaml:"reason"`
-
-	// description: |
-	//   Whether this test is expected to fail for this particular configuration.
-	//   Default: false
-	// examples:
-	//   - value: true
-	ExpectFailure *bool `yaml:"expect_failure,omitempty"`
 
 	// description: |
 	//   Whether a stage should be retried once in case of failure.
@@ -86,8 +87,9 @@ type TestOverride struct {
 	RetryOnce *bool `yaml:"retry_once,omitempty"`
 
 	// description: |
-	//   Specifies overrides on the test output
+	//   Specifies overrides on the test output.
+	//   This definition *replaces* the output definition of the test.
 	// examples:
-	//   - value: 400
+	//   - value: ExampleOutput
 	Output types.Output `yaml:"output"`
 }

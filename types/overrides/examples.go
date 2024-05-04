@@ -10,6 +10,7 @@ var (
 	AnnotationsExample = types.AnnotationsExample
 	ReasonExample      = types.ReasonExample
 	ExampleLog         = types.ExampleLog
+	ExampleOutput      = types.ExampleOutput
 
 	MetaExample = FTWOverridesMeta{
 		Engine:      "libmodsecurity3",
@@ -18,11 +19,10 @@ var (
 	}
 	TestOverridesExample = []TestOverride{
 		{
-			RuleId:        920100,
-			TestIds:       []int{4, 6},
-			Reason:        types.ReasonExample,
-			ExpectFailure: func() *bool { b := true; return &b }(),
-			Output:        types.ExampleOutput,
+			RuleId:  920100,
+			TestIds: []uint{4, 6},
+			Reason:  types.ReasonExample,
+			Output:  types.ExampleOutput,
 		},
 	}
 )
