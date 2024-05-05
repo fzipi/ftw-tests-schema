@@ -5,6 +5,8 @@
 
 package types
 
+import "fmt"
+
 // Welcome to the FTW YAMLFormat documentation.
 // In this document we will explain all the possible options that can be used within the YAML format.
 // Generally this is the preferred format for writing tests in as they don't require any programming skills
@@ -17,11 +19,11 @@ type FTWTest struct {
 	Meta FTWTestMeta `yaml:"meta"`
 
 	// description: |
-	//   FileName is the name of the file where these tests are.
+	//   RuleId is the ID of the rule this test targets.
 	// examples:
-	//   - name: FileName
-	//     value: "\"test-1234.yaml\""
-	FileName string
+	//   - name: RuleId
+	//     value: 123456
+	RuleId uint `yaml:"rule_id"`
 
 	// description: |
 	//   Tests is a list of FTW tests
@@ -70,7 +72,7 @@ type FTWTestMeta struct {
 	Version string `yaml:"version,omitempty"`
 }
 
-// Test is an individual types. One test can have multiple stages.
+// Test is an individual test case. One test can have multiple stages.
 type Test struct {
 	// description: |
 	//   TestTitle is the title of this particular types. It is used for inclusion/exclusion of each run by the tool.
@@ -78,43 +80,48 @@ type Test struct {
 	//   - value: ExampleTest.TestTitle
 	//
 	// Deprecated: use `rule_id` and `test_id`
-	TestTitle string `yaml:"test_title,omitempty"`
+	TestTitle string
 
 	// description: |
-	//   RuleId is the ID of the rule this test targets
+	//   RuleId is the ID of the rule this test targets.
+	//   This field is for internal use and not exposed via YAML.
 	// examples:
 	//   - name: RuleId
 	//     value: 123456
-	RuleId int `yaml:"rule_id"`
+	RuleId uint
 
 	// description: |
-	//   TestId is the ID of the test, in relation to `rule_id`
+	//   TestId is the ID of the test, in relation to `rule_id`.
+	//   When this field is not set, the ID will be inferred from the
+	//   position.
 	// examples:
 	//   - name: TestId
 	//     value: 4
-	TestId int `yaml:"test_id"`
+	TestId uint `yaml:"test_id"`
 
 	// description: |
-	//   TestDescription is the description for this particular types. Should be used to describe the internals of
-	//   the specific things this test is targeting.
+	//   TestDescription is the description for this particular test.
+	//   Should be used to describe the internals of the specific things this test is targeting.
 	// examples:
 	//   - value: ExampleTest.TestDescription
 	TestDescription string `yaml:"desc,omitempty"`
 
 	// description: |
-	//   Stages is the list of all the stages to perform this types.
+	//   Stages is the list of all the stages to perform this test.
 	// examples:
 	//   - value: ExampleStages
 	Stages []Stage `yaml:"stages"`
 }
 
+// IdString prints the human readable ID of a test in the format
+// <rule ID>-<test ID>. This format is also used when matching
+// the include / exclude regular expressions.
+func (t *Test) IdString() string {
+	return fmt.Sprintf("%d-%d", t.RuleId, t.TestId)
+}
+
 // Stage is a list of stages
 type Stage struct {
-	// description: |
-	//   StageData is an individual test stage.
-	//
-	// Deprecated: use the other fields of `Stage`
-	SD StageData `yaml:"stage,omitempty"`
 	// description: |
 	//   Describes the purpose of this stage.
 	// examples:
@@ -156,7 +163,6 @@ type StageData struct {
 }
 
 // Input represents the input request in a stage
-// The fields `Version`, `Method` and `URI` we want to explicitly now when they are set to ""
 type Input struct {
 	// description: |
 	//   DestAddr is the IP of the destination host that the test will send the message to.
@@ -187,6 +193,16 @@ type Input struct {
 	URI *string `yaml:"uri,omitempty" koanf:"uri,omitempty"`
 
 	// description: |
+	//   FollowRedirect will expect the previous stage of the same test to have received a
+	//   redirect response, it will fail the test otherwise. The redirect location will be used
+	//   to send the request for the current stage and any settings for port, protocol, address,
+	//   or URI will be ignored.
+	// examples:
+	//   - name: follow_redirect
+	//     value: true
+	FollowRedirect *bool `yaml:"follow_redirect,omitempty" koanf:"follow_redirect,omitempty"`
+
+	// description: |
 	//   Version allows you to declare the HTTP version the test should use as part of the request line.
 	// examples:
 	//   - name: Version
@@ -213,6 +229,15 @@ type Input struct {
 	//   - name: Data
 	//     value: "\"Bibitti bopi\""
 	Data *string `yaml:"data,omitempty" koanf:"data,omitempty"`
+
+	// description: |
+	//   EncodedData allows you to declare the payload as a base64 encoded string, which
+	//   will be decoded into bytes and sent verbatimt to the server. This allows for complex
+	//   payloads that include invisible characters or invalid Unicode byte sequences.
+	// examples:
+	//   - name: encoded_data
+	//     value: ExampleEncodedData
+	EncodedData *string `yaml:"encoded_data,omitempty" koanf:"encoded_data,omitempty"`
 
 	// description: |
 	//   SaveCookie allows you to automatically provide cookies if there are multiple stages and save cookie is set
@@ -302,21 +327,27 @@ type Output struct {
 	//   - name: ExpectError
 	//     value: false
 	ExpectError *bool `yaml:"expect_error,omitempty"`
+
+	// description: |
+	//   When `RetryOnce` is true, the test run will be retried once upon failures. This options
+	//   primary purpose is to work around a race condition in phase 5, where the log entry for
+	//   a phase 5 rule may appear after the end marker of the previous test.
+	RetryOnce *bool `yaml:"retry_once,omitempty"`
 }
 
 // Log is used to configure expectations about the log contents.
 type Log struct {
 	// description: |
-	//   Expect the given ID to be contained in the log output.
+	//   Expect the given IDs to be contained in the log output.
 	// examples:
-	//   - value: ExampleLog.ExpectId
-	ExpectId int `yaml:"expect_id,omitempty"`
+	//   -value: ExampleLog.ExpectIds
+	ExpectIds []int `yaml:"expect_ids,omitempty"`
 
 	// description: |
-	//   Expect the given ID _not_ to be contained in the log output.
+	//   Expect the given IDs _not_ to be contained in the log output.
 	// examples:
-	//   - value: ExampleLog.NoExpectId
-	NoExpectId int `yaml:"no_expect_id,omitempty"`
+	//   - value: ExampleLog.NoExpectIds
+	NoExpectIds []int `yaml:"no_expect_ids,omitempty"`
 
 	// description: |
 	//   Expect the regular expression to match log content for the current types.

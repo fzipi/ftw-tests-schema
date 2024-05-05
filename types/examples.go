@@ -43,15 +43,15 @@ var (
 	}
 	ExampleOutput = Output{
 		Status:           200,
-		ResponseContains: "",
+		ResponseContains: "HTTP/1.1",
 		LogContains:      "nothing",
-		NoLogContains:    "",
+		NoLogContains:    "everything",
 		Log:              ExampleLog,
 		ExpectError:      helpers.BoolPtr(true),
 	}
 	ExampleLog = Log{
-		ExpectId:     123456,
-		NoExpectId:   123456,
+		ExpectIds:    []int{123456},
+		NoExpectIds:  []int{123456},
 		MatchRegex:   `id[:\s"]*123456`,
 		NoMatchRegex: `id[:\s"]*123456`,
 	}
@@ -61,4 +61,5 @@ var (
 	}
 	ReasonExample = "nginx returns 400 when `Content-Length` header is sent in a\n" +
 		"`Transfer-Encoding: chunked` request."
+	ExampleEncodedData = "c29tZXRoaW5nIHdpdGgKbmV3bGluZQo="
 )
