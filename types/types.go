@@ -341,13 +341,13 @@ type Log struct {
 	//   Expect the given IDs to be contained in the log output.
 	// examples:
 	//   -value: ExampleLog.ExpectIds
-	ExpectIds []int `yaml:"expect_ids,omitempty"`
+	ExpectIds []uint `yaml:"expect_ids,omitempty"`
 
 	// description: |
 	//   Expect the given IDs _not_ to be contained in the log output.
 	// examples:
 	//   - value: ExampleLog.NoExpectIds
-	NoExpectIds []int `yaml:"no_expect_ids,omitempty"`
+	NoExpectIds []uint `yaml:"no_expect_ids,omitempty"`
 
 	// description: |
 	//   Expect the regular expression to match log content for the current types.

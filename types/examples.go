@@ -50,8 +50,8 @@ var (
 		ExpectError:      helpers.BoolPtr(true),
 	}
 	ExampleLog = Log{
-		ExpectIds:    []int{123456},
-		NoExpectIds:  []int{123456},
+		ExpectIds:    []uint{123456},
+		NoExpectIds:  []uint{123456},
 		MatchRegex:   `id[:\s"]*123456`,
 		NoMatchRegex: `id[:\s"]*123456`,
 	}
