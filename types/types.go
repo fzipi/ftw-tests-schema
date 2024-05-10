@@ -70,6 +70,13 @@ type FTWTestMeta struct {
 	//   - name: Version
 	//     value: "\"v1\""
 	Version string `yaml:"version,omitempty"`
+
+	// description: |
+	//   Tags is list of strings that can be used for arbitrary grouping of tests.
+	// examples:
+	//   - name: Tags
+	//     value: ["PHP", "bug-123"]
+	Tags []string `yaml:"tags,omitempty"`
 }
 
 // Test is an individual test case. One test can have multiple stages.
@@ -111,6 +118,13 @@ type Test struct {
 	// examples:
 	//   - value: ExampleStages
 	Stages []Stage `yaml:"stages"`
+
+	// description: |
+	//   Tags is list of strings that can be used for arbitrary grouping of tests.
+	// examples:
+	//   - name: Tags
+	//     value: ["PHP", "bug-123"]
+	Tags []string `yaml:"tags,omitempty"`
 }
 
 // IdString prints the human readable ID of a test in the format
@@ -279,6 +293,16 @@ type Input struct {
 	//
 	// Deprecated: use `encoded_request`
 	RAWRequest string `yaml:"raw_request,omitempty" koanf:"raw_request,omitempty"`
+
+	// description: |
+	//   Isolated specifies that the test is expected to trigger a single rule only.
+	//   If the rule triggers any other rule than the (single) one specified in
+	//   expect_ids, the test fill be considered a failure.
+	//   Default: false
+	// examples:
+	//   - name: Isolated
+	//     value: true
+	Isolated bool `yaml:"isolated,omitempty" koanf:"isolated, omitempty"`
 }
 
 // Output is the response expected from the test
