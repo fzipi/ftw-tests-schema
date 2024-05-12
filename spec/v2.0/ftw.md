@@ -245,6 +245,23 @@ version: v1
 
 <hr />
 
+<div class="dd">
+
+<code>tags</code>  <i>[]string</i>
+
+</div>
+<div class="dt">
+
+description: |
+   Tags is list of strings that can be used for arbitrary grouping of tests.
+ examples:
+   - name: Tags
+     value: ["PHP", "bug-123"]
+
+</div>
+
+<hr />
+
 
 
 
@@ -395,6 +412,23 @@ stages:
         expect_error: true
 ```
 
+
+</div>
+
+<hr />
+
+<div class="dd">
+
+<code>tags</code>  <i>[]string</i>
+
+</div>
+<div class="dt">
+
+description: |
+   Tags is list of strings that can be used for arbitrary grouping of tests.
+ examples:
+   - name: Tags
+     value: ["PHP", "bug-123"]
 
 </div>
 
@@ -1145,6 +1179,33 @@ a phase 5 rule may appear after the end marker of the previous test.
 
 <hr />
 
+<div class="dd">
+
+<code>isolated</code>  <i>bool</i>
+
+</div>
+<div class="dt">
+
+Isolated specifies that the test is expected to trigger a single rule only.
+If the rule triggers any other rule than the (single) one specified in
+expect_ids, the test fill be considered a failure.
+Default: false
+
+
+
+Examples:
+
+
+```yaml
+# Isolated
+isolated: true
+```
+
+
+</div>
+
+<hr />
+
 
 
 
@@ -1172,7 +1233,7 @@ no_match_regex: id[:\s"]*123456
 
 <div class="dd">
 
-<code>expect_ids</code>  <i>[]int</i>
+<code>expect_ids</code>  <i>[]uint</i>
 
 </div>
 <div class="dt">
@@ -1188,7 +1249,7 @@ description: |
 
 <div class="dd">
 
-<code>no_expect_ids</code>  <i>[]int</i>
+<code>no_expect_ids</code>  <i>[]uint</i>
 
 </div>
 <div class="dt">
@@ -1843,6 +1904,33 @@ a phase 5 rule may appear after the end marker of the previous test.
 
 <hr />
 
+<div class="dd">
+
+<code>isolated</code>  <i>bool</i>
+
+</div>
+<div class="dt">
+
+Isolated specifies that the test is expected to trigger a single rule only.
+If the rule triggers any other rule than the (single) one specified in
+expect_ids, the test fill be considered a failure.
+Default: false
+
+
+
+Examples:
+
+
+```yaml
+# Isolated
+isolated: true
+```
+
+
+</div>
+
+<hr />
+
 
 
 
@@ -1858,7 +1946,7 @@ a phase 5 rule may appear after the end marker of the previous test.
 
 <div class="dd">
 
-<code>expect_ids</code>  <i>[]int</i>
+<code>expect_ids</code>  <i>[]uint</i>
 
 </div>
 <div class="dt">
@@ -1874,7 +1962,7 @@ description: |
 
 <div class="dd">
 
-<code>no_expect_ids</code>  <i>[]int</i>
+<code>no_expect_ids</code>  <i>[]uint</i>
 
 </div>
 <div class="dt">
