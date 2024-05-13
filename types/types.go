@@ -293,16 +293,6 @@ type Input struct {
 	//
 	// Deprecated: use `encoded_request`
 	RAWRequest string `yaml:"raw_request,omitempty" koanf:"raw_request,omitempty"`
-
-	// description: |
-	//   Isolated specifies that the test is expected to trigger a single rule only.
-	//   If the rule triggers any other rule than the (single) one specified in
-	//   expect_ids, the test fill be considered a failure.
-	//   Default: false
-	// examples:
-	//   - name: Isolated
-	//     value: true
-	Isolated bool `yaml:"isolated,omitempty" koanf:"isolated, omitempty"`
 }
 
 // Output is the response expected from the test
@@ -357,6 +347,16 @@ type Output struct {
 	//   primary purpose is to work around a race condition in phase 5, where the log entry for
 	//   a phase 5 rule may appear after the end marker of the previous test.
 	RetryOnce *bool `yaml:"retry_once,omitempty"`
+
+	// description: |
+	//   Isolated specifies that the test is expected to trigger a single rule only.
+	//   If the rule triggers any other rule than the (single) one specified in
+	//   expect_ids, the test fill be considered a failure.
+	//   Default: false
+	// examples:
+	//   - name: Isolated
+	//     value: true
+	Isolated bool `yaml:"isolated,omitempty" koanf:"isolated, omitempty"`
 }
 
 // Log is used to configure expectations about the log contents.
