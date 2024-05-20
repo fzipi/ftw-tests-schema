@@ -3,7 +3,7 @@
 
 package types
 
-import "github.com/coreruleset/ftw-tests-schema/internal/helpers"
+import "github.com/coreruleset/ftw-tests-schema/v2/internal/helpers"
 
 var (
 	ExampleTests = []Test{

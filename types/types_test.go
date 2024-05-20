@@ -9,7 +9,7 @@ import (
 	"github.com/goccy/go-yaml"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/coreruleset/ftw-tests-schema/internal/helpers"
+	"github.com/coreruleset/ftw-tests-schema/v2/internal/helpers"
 )
 
 var testYaml = `---
