@@ -6,8 +6,8 @@ package main
 import (
 	"os"
 
-	"github.com/coreruleset/ftw-tests-schema/types"
-	"github.com/coreruleset/ftw-tests-schema/types/overrides"
+	"github.com/coreruleset/ftw-tests-schema/v2/types"
+	"github.com/coreruleset/ftw-tests-schema/v2/types/overrides"
 )
 
 func main() {
