@@ -10,8 +10,14 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
+	"path"
+	"regexp"
+	"slices"
 
+	"github.com/coreruleset/ftw-tests-schema/v2/types"
+	"github.com/invopop/jsonschema"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
@@ -116,4 +122,42 @@ func Markdown() error {
 // Check runs lint and tests.
 func Check() {
 	mg.SerialDeps(Lint, Test)
+}
+
+// Writes a JSON schema based on the current version.
+// Make sure the update https://github.com/SchemaStore/schemastore when
+// you create a new version.
+func JsonSchema() {
+	specsDir := "spec"
+	_json, err := jsonschema.Reflect(&types.FTWTest{}).MarshalJSON()
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	entries, err := os.ReadDir(specsDir)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	slices.SortFunc(entries, func(a fs.DirEntry, b fs.DirEntry) int {
+		// sort v2.0 before v1
+		if a.Name() < b.Name() {
+			return 1
+		} else if a.Name() > b.Name() {
+			return -1
+		} else {
+			return 0
+		}
+	})
+	versionRegex := regexp.MustCompile(`v\d+(\.\d+)?`)
+	outputDir := "."
+	for _, entry := range entries {
+		if entry.IsDir() && versionRegex.MatchString(entry.Name()) {
+			outputDir = entry.Name()
+			break
+		}
+	}
+	err = os.WriteFile(path.Join(specsDir, outputDir, fmt.Sprintf("waf-tests-schema-%s.json", outputDir)), _json, fs.ModePerm)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
 }
