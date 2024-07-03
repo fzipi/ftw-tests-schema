@@ -17,6 +17,7 @@ import (
 	"slices"
 
 	"github.com/coreruleset/ftw-tests-schema/v2/types"
+	"github.com/coreruleset/ftw-tests-schema/v2/types/overrides"
 	"github.com/invopop/jsonschema"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -124,12 +125,17 @@ func Check() {
 	mg.SerialDeps(Lint, Test)
 }
 
-// Writes a JSON schema based on the current version.
+// Writes JSON schemas based on the current version.
 // Make sure the update https://github.com/SchemaStore/schemastore when
 // you create a new version.
-func JsonSchema() {
+func JsonSchemas() {
 	specsDir := "spec"
-	_json, err := jsonschema.Reflect(&types.FTWTest{}).MarshalJSON()
+	testJson, err := jsonschema.Reflect(&types.FTWTest{}).MarshalJSON()
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	overridesJson, err := jsonschema.Reflect(&overrides.FTWOverrides{}).MarshalJSON()
 	if err != nil {
 		fmt.Print(err.Error())
 	}
@@ -156,7 +162,12 @@ func JsonSchema() {
 			break
 		}
 	}
-	err = os.WriteFile(path.Join(specsDir, outputDir, fmt.Sprintf("waf-tests-schema-%s.json", outputDir)), _json, fs.ModePerm)
+	err = os.WriteFile(path.Join(specsDir, outputDir, fmt.Sprintf("waf-tests-schema-%s.json", outputDir)), testJson, fs.ModePerm)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	err = os.WriteFile(path.Join(specsDir, outputDir, fmt.Sprintf("waf-platform-overrides-schema-%s.json", outputDir)), overridesJson, fs.ModePerm)
 	if err != nil {
 		fmt.Print(err.Error())
 	}
