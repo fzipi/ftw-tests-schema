@@ -61,5 +61,17 @@ var (
 	}
 	ReasonExample = "nginx returns 400 when `Content-Length` header is sent in a\n" +
 		"`Transfer-Encoding: chunked` request."
-	ExampleEncodedData = "c29tZXRoaW5nIHdpdGgKbmV3bGluZQo="
+	ExampleEncodedData         = "c29tZXRoaW5nIHdpdGgKbmV3bGluZQo="
+	ExampleResponseBody        = "{\"aJsonDocument\": [\"in the response\"]}\n"
+	ExampleEncodedResponseBody = "eyJhSnNvbkRvY3VtZW50IjogWyJpbiB0aGUgcmVzcG9uc2UiXX0="
+	ExampleRespone             = Response{
+		Status: 502,
+		Headers: map[string]string{
+			"Content-Type": "application/problem+json",
+			"x-mr-burns":   "excellent",
+		},
+		Body:        ExampleResponseBody,
+		EncodedBody: ExampleEncodedResponseBody,
+		LogMessage:  "Response splitting test 1",
+	}
 )

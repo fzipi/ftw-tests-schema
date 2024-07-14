@@ -231,7 +231,7 @@ type Input struct {
 	Method *string `yaml:"method,omitempty" json:"method,omitempty" koanf:"method,omitempty"`
 
 	// description: |
-	//   Method allows you to declare headers that the test should send.
+	//   Headers allows you to declare headers that the test should send.
 	// examples:
 	//   - name: Headers
 	//     value: ExampleHeaders
@@ -293,9 +293,57 @@ type Input struct {
 	//
 	// Deprecated: use `encoded_request`
 	RAWRequest string `yaml:"raw_request,omitempty" json:"raw_request,omitempty" koanf:"raw_request,omitempty"`
+
+	// description: |
+	//   Response describes a response from the web server that a WAF is expected to analyse.
+	//   Note: This functionality requires a backend that can send the specified request to the
+	//         reverse proxy. Currently, only Albedo (https://github.com/coreruleset/albedo) is supported.
+	// example:
+	//   - name Response
+	//     value: ExampleResponse
+	Response Response `yaml:"response,omitempty" json:"response,omitempty" koanf:"response,omitempty"`
 }
 
-// Output is the response expected from the test
+type Response struct {
+	// description: |
+	//   Headers defines the headers the response will carry.
+	// examples:
+	//   - name: Headers
+	//     value: ExampleHeaders
+	Headers map[string]string `yaml:"headers,omitempty" json:"headers,omitempty" koanf:"headers,omitempty"`
+
+	// description: |
+	//   Status describes the HTTP status code of the response. Defaults to `200` if omitted.
+	// examples:
+	//   - name: Status
+	//     value: 302
+	Status int `yaml:"status,omitempty" json:"status,omitempty" koanf:"status,omitempty"`
+
+	// description: |
+	//   Body defines the body of the response as a plain string.
+	// examples:
+	//   - name: Body
+	//     value: ExampleResponseBody
+	Body string `yaml:"body,omitempty" json:"body,omitempty" koanf:"body,omitempty"`
+
+	// description: |
+	//   EncodedBody defines the body of the response as a base64 encoded string. This is useful if the response
+	//   needs to contain non-printable characters.
+	// examples:
+	//   - name: EncodedBody
+	//     value: ExampleEncodedResponseBody
+	EncodedBody string `yaml:"encoded_body,omitempty" json:"encoded_body,omitempty" koanf:"encoded_body,omitempty"`
+
+	// description: |
+	//   LogMessage specifies a message to be printed in the log of the backend server that sends the response.
+	//   This can be helpful when debugging, to match resopnses sent by the backend to test executions.
+	// examples:
+	//   - name: LogMessage
+	//     value: "\"Response splitting test 1\""
+	LogMessage string `yaml:"log_message,omitempty" json:"log_message,omitempty" koanf:"log_message,omitempty"`
+}
+
+// Output defines the expectations of a test
 type Output struct {
 	// description: |
 	//   Status describes the HTTP status code expected in the response.

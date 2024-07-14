@@ -42,7 +42,6 @@ tests:
           response_contains: ""
           log_contains: "nothing"
           no_log_contains: "everything"
-  - stages:
       - input:
           dest_addr: "127.0.0.1"
           port: 80
@@ -50,6 +49,15 @@ tests:
           headers:
             User-Agent: "FTW Schema Tests"
             Host: "localhost"
+          response:
+            status: 502
+            headers:
+              Content-Type: "application/problem+json"
+              x-mr-burns: excellent
+            body: |
+              {"aJsonDocument": ["in the response"]}
+            encoded_body: eyJhSnNvbkRvY3VtZW50IjogWyJpbiB0aGUgcmVzcG9uc2UiXX0=
+            log_message: Response splitting test 1
         output:
           status: 200
 `
@@ -72,10 +80,6 @@ var ftwTest = &FTWTest{
 					Input:       ExampleInput,
 					Output:      ExampleOutput,
 				},
-			},
-		},
-		{
-			Stages: []Stage{
 				{
 					Input: Input{
 						DestAddr: helpers.StrPtr("127.0.0.1"),
@@ -85,6 +89,7 @@ var ftwTest = &FTWTest{
 							"User-Agent": "FTW Schema Tests",
 							"Host":       "localhost",
 						},
+						Response: ExampleRespone,
 					},
 					Output: Output{
 						Status: 200,
@@ -122,9 +127,26 @@ func TestUnmarshalFTWTest(t *testing.T) {
 			assertions.Equal(expectedStage.Input.Method, stage.Input.Method)
 			assertions.Len(stage.Input.Headers, len(expectedStage.Input.Headers))
 
-			for k, header := range stage.Input.Headers {
-				expectedHeader := expectedStage.Input.Headers[k]
-				assertions.Equal(expectedHeader, header)
+			for name, value := range stage.Input.Headers {
+				assertions.Contains(expectedStage.Input.Headers, name)
+				assertions.Equal(expectedStage.Input.Headers[name], value)
+			}
+
+			response := stage.Input.Response
+			if j == 1 {
+				assertions.NotNil(response)
+				assertions.Equal(502, response.Status)
+				assertions.Equal("{\"aJsonDocument\": [\"in the response\"]}\n", response.Body)
+				assertions.Equal("eyJhSnNvbkRvY3VtZW50IjogWyJpbiB0aGUgcmVzcG9uc2UiXX0=", response.EncodedBody)
+				assertions.Equal("Response splitting test 1", response.LogMessage)
+				assertions.Len(response.Headers, len(expectedStage.Input.Headers))
+
+				for name, value := range stage.Input.Headers {
+					assertions.Contains(expectedStage.Input.Headers, name)
+					assertions.Equal(expectedStage.Input.Headers[name], value)
+				}
+			} else {
+				assertions.Equal(response, Response{})
 			}
 
 			assertions.Equal(expectedStage.Output.NoLogContains, stage.Output.NoLogContains)
