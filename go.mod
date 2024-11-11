@@ -1,6 +1,8 @@
 module github.com/coreruleset/ftw-tests-schema/v2
 
-go 1.21
+go 1.21.0
+
+toolchain go1.23.3
 
 require (
 	github.com/invopop/jsonschema v0.12.0
@@ -18,7 +20,7 @@ require (
 
 require (
 	// Goccy verion is expected to stay at 1.9.2 (Same of go-ftw) because of https://github.com/goccy/go-yaml/issues/325
-	github.com/goccy/go-yaml v1.13.6
+	github.com/goccy/go-yaml v1.13.7
 	github.com/projectdiscovery/yamldoc-go v1.0.4
 )
 
