@@ -24,14 +24,14 @@ import (
 )
 
 var addLicenseVersion = "v1.1.1" // https://github.com/google/addlicense
-var golangCILintVer = "v1.55.2"  // https://github.com/golangci/golangci-lint/releases
+var golangCILintVer = "v1.59.1"  // https://github.com/golangci/golangci-lint/releases
 var gosImportsVer = "v0.3.8"     // https://github.com/rinchsan/gosimports/releases/tag/v0.3.8
 
 var errRunGoModTidy = errors.New("go.mod/sum not formatted, commit changes")
 var errNoGitDir = errors.New("no .git directory found")
 var errUpdateGeneratedFiles = errors.New("generated files need to be updated")
 
-// Generate Go documernation files for YAML structures
+// Generate Go documentation files for YAML structures
 func Generate() error {
 	if err := sh.RunV("go", "generate", "./..."); err != nil {
 		return err
