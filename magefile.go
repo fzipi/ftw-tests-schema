@@ -16,11 +16,12 @@ import (
 	"regexp"
 	"slices"
 
-	"github.com/coreruleset/ftw-tests-schema/v2/types"
-	"github.com/coreruleset/ftw-tests-schema/v2/types/overrides"
 	"github.com/invopop/jsonschema"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
+
+	"github.com/coreruleset/ftw-tests-schema/v2/types"
+	"github.com/coreruleset/ftw-tests-schema/v2/types/overrides"
 )
 
 var addLicenseVersion = "v1.1.1" // https://github.com/google/addlicense
