@@ -91,6 +91,7 @@ type Test struct {
 
 	// description: |
 	//   RuleId is the ID of the rule this test targets.
+	//
 	//   This field is for internal use and not exposed via YAML.
 	// examples:
 	//   - name: RuleId
@@ -99,6 +100,7 @@ type Test struct {
 
 	// description: |
 	//   TestId is the ID of the test, in relation to `rule_id`.
+	//
 	//   When this field is not set, the ID will be inferred from the
 	//   position.
 	// examples:
@@ -108,6 +110,7 @@ type Test struct {
 
 	// description: |
 	//   TestDescription is the description for this particular test.
+	//
 	//   Should be used to describe the internals of the specific things this test is targeting.
 	// examples:
 	//   - value: ExampleTest.TestDescription
@@ -271,7 +274,8 @@ type Input struct {
 
 	// description: |
 	//   AutocompleteHeaders allows the test framework to automatically fill the request with Content-Type and Connection headers.
-	//   Defaults to true.
+	//
+	//   Defaults: `true`.
 	// examples:
 	//   - name: StopMagic
 	//     value: false
@@ -279,6 +283,7 @@ type Input struct {
 
 	// description: |
 	//   EncodedRequest will take a base64 encoded string that will be decoded and sent through as the request.
+	//
 	//   It will override all other settings
 	// examples:
 	//   - name: EncodedRequest
@@ -296,12 +301,29 @@ type Input struct {
 
 	// description: |
 	//   Response describes a response from the web server that a WAF is expected to analyse.
+	//
 	//   Note: This functionality requires a backend that can send the specified request to the
 	//         reverse proxy. Currently, only Albedo (https://github.com/coreruleset/albedo) is supported.
 	// example:
-	//   - name Response
+	//   - name: Response
 	//     value: ExampleResponse
 	Response Response `yaml:"response,omitempty" json:"response,omitempty" koanf:"response,omitempty"`
+
+	// description: |
+	//   VirtualHostMode determines the value of the `Host` header for internal requests (e.g., the
+	//   requests used to insert markers into the web server log). This is useful for running tests
+	//   against a virtual host, as the log entries for all requests must end up in the same log file,
+	//   and often, log files are segregated by virtual host.
+	//
+	//   If `true`, internal requests will use the same value for the `Host` header as the test request.
+	//
+	//   If `false`, the value for the `Host` header of internal requests will be `localhost`.
+	//
+	//   Default: `false`.
+	// example:
+	//   - name: VirtualHostMode
+	//     value: true
+	VirtualHostMode bool `yaml:"virtual_host_mode,omitempty" json:"virtual_host_mode,omitempty" koanf:"virtual_host_mode,omitempty"`
 }
 
 type Response struct {
@@ -313,7 +335,9 @@ type Response struct {
 	Headers map[string]string `yaml:"headers,omitempty" json:"headers,omitempty" koanf:"headers,omitempty"`
 
 	// description: |
-	//   Status describes the HTTP status code of the response. Defaults to `200` if omitted.
+	//   Status describes the HTTP status code of the response.
+	//
+	//   Default: `200` if omitted.
 	// examples:
 	//   - name: Status
 	//     value: 302
@@ -400,7 +424,8 @@ type Output struct {
 	//   Isolated specifies that the test is expected to trigger a single rule only.
 	//   If the rule triggers any other rule than the (single) one specified in
 	//   expect_ids, the test fill be considered a failure.
-	//   Default: false
+	//
+	//   Default: `false`
 	// examples:
 	//   - name: Isolated
 	//     value: true
