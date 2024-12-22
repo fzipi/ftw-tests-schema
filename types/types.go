@@ -291,15 +291,6 @@ type Input struct {
 	EncodedRequest string `yaml:"encoded_request,omitempty" json:"encoded_request,omitempty" koanf:"encoded_request,omitempty"`
 
 	// description: |
-	//   RAWRequest is deprecated.
-	// examples:
-	//   - name: RAWRequest
-	//     value: "\"TXkgRGF0YQo=\""
-	//
-	// Deprecated: use `encoded_request`
-	RAWRequest string `yaml:"raw_request,omitempty" json:"raw_request,omitempty" koanf:"raw_request,omitempty"`
-
-	// description: |
 	//   Response describes a response from the web server that a WAF is expected to analyse.
 	//
 	//   Note: This functionality requires a backend that can send the specified request to the
