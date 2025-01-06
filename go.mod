@@ -3,7 +3,7 @@ module github.com/coreruleset/ftw-tests-schema/v2
 go 1.21
 
 require (
-	github.com/invopop/jsonschema v0.12.0
+	github.com/invopop/jsonschema v0.13.0
 	github.com/magefile/mage v1.15.0
 )
 
